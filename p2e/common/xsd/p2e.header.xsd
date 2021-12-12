@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns='https://github.com/dwugofski/rpgml/p2e'
+	targetNamespace='https://github.com/dwugofski/rpgml/p2e'
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<!--
+		Wrapper for types associated with the header information of an entity
+	-->
+
+	<xs:include schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+
+	<!--
+	============================================================================
+	TRAIT TYPE
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Type to outline the level that a P2E entity has
+	-->
+	
+	<xs:element name="level">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="lower">
+					<xs:enumeration value="var">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Indicates that the item is available at multiple levels.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="int">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The singular, integer level of the item.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:element>
+
+	<!--
+	============================================================================
+	TRAIT TYPE
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Type to outline a trait that a P2E entity has
+	-->
+
+	<xs:complexType name="traits">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of traits for a P2E entity.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="trait" type="trait"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="traits" type="traits"/>
+
+	<xs:complexType name="trait">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A trait for a P2E entity.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="lower">
+				<xs:attribute name="type" type="lower">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The type of trait this is. If unspecified, the type will be auto-selected.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:element name="trait" type="trait"/>
+
+</xs:schema>

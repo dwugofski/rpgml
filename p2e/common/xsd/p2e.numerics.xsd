@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns='https://github.com/dwugofski/rpgml/p2e'
+	targetNamespace='https://github.com/dwugofski/rpgml/p2e'
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<!--
+		Wrapper for types associated with numeric values in P2E
+	-->
+
+	<xs:import schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+
+	<!--
+	============================================================================
+	PRICE TYPE
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Types to outline the price of something
+	-->
+
+	<xs:simpleType name="coin">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The specification of a type of currency
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="lower">
+				<xs:enumeration value="cp">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							Copper pieces (base).
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="sp">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							Silver pieces (1sp = 10cp).
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="gp">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							Gold pieces (1gp = 100cp).
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="pp">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							Platinum pieces (1pp = 1,000cp).
+						</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="coin" type="coin"/>
+
+	<xs:group name="priceGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A group to express the monetary cost associated with an entity
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="int">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The amount of currency required
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="coin">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The type of currency required
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:group ref="numericAddendumGroup"/>
+		</xs:sequence>
+	</xs:group>
+
+	<xs:complexType name="price">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The monetary cost associated with an entity
+			</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+
+</xs:schema>

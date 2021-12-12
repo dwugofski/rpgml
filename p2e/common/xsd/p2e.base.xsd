@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:rpgml="https://github.com/dwugofski/rpgml"
+	xmlns='https://github.com/dwugofski/rpgml/p2e'
+	targetNamespace='https://github.com/dwugofski/rpgml/p2e'
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<!-- Wrapper to include all Pathfinder 2E XSD template includes -->
+
+	<xs:include schemaLocation="./p2e.header.xsd"/>
+	<xs:include schemaLocation="./p2e.numerics.xsd"/>
+	<xs:include schemaLocation="./p2e.mechanics.xsd"/>
+
+</xs:schema>

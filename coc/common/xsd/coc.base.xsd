@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:rpgml="https://github.com/dwugofski/rpgml"
+	xmlns="https://github.com/dwugofski/rpgml/coc"
+	targetNamespace="https://github.com/dwugofski/rpgml/coc"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<!-- Wrapper to include all Call of Cthulhu 7E XSD template includes -->
+
+	<xs:include schemaLocation="./coc.numerics.xsd"/>
+
+</xs:schema>

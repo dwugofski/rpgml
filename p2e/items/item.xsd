@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:rpgml="https://github.com/dwugofski/rpgml"
+	xmlns='https://github.com/dwugofski/rpgml/p2e'
+	targetNamespace='https://github.com/dwugofski/rpgml/p2e'
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:import namespace="https://github.com/dwugofski/rpgml" schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="../common/xsd/p2e.header.xsd"/>
+
+	<!--
+	============================================================================
+	ITEM DESCRIPTION TEMPLATE
+	============================================================================
+	-->
+
+	<xs:element name="item">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="rpgml:name">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The display name of the item.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+
+				<xs:element ref="level"/>
+
+				<xs:element ref="traits">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The traits the item has
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+
+				<xs:element ref="price" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The cost associated with the item
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+
+				<xs:group ref="itemHeaderGroup"/>
+
+				<xs:element ref="summary">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							A rich-text description of what the item does and / or looks like
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+
+				<xs:element name="variants" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							List of the different variants for the item.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:element name="variant" type="variant">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">
+										The description of a variant the item has.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+
+			</xs:sequence>
+			<xs:attribute name="id" type="id_string"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="summary">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A rich-text description of what an item does and / or looks like.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="descriptionGroup" minOccurs="0"/>
+			<xs:element ref="activate" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Description of how to activate an item.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="summary" type="summary"/>
+
+	<xs:complexType name="activate">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Description of how to activate an item
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="action">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Outlines the action or activity that is required to activate this item
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="frequency" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Outlines how often the item can be activated
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="effect" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Describes the effect of activation.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:group ref="descriptionGroup"/>
+				</xs:sequence>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="activate" type="activate"/>
+
+	<xs:complexType name="variant">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A description of a variant an item has.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="type" type="plaintext">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The name for this variant. Sometimes just the prefix modifier such as, "lesser."
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="level">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The level of this item variant.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="price" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The price of this item variant.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:group ref="itemHeaderGroup">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The header information for this variant.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:group>
+			<xs:element ref="description" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The description for this variant.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="itemHeaderGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Header information for an item's properties.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="usage" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Describes conditions which must be met for the item to be used.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="held" type="xs:positiveInteger">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Outlines how many hands the item must be held in.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="worn" type="lower">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Outlines how the creature using the item must be wearing it.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="bulk" minOccurs="0"/>
+			<xs:element ref="activate" minOccurs="0"/>
+		</xs:sequence>
+	</xs:group>
+
+</xs:schema>
