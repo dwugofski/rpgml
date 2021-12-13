@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="https://github.com/dwugofski/rpgml/coc"
+	targetNamespace="https://github.com/dwugofski/rpgml/coc"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:include schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="../common/xsd/coc.base.xsd"/>
+
+	<!--
+	============================================================================
+	Spell Description Template
+	============================================================================
+	-->
+
+	<xs:element name="spell">
+		<xs:complexType>
+			<!--
+			Elements ===========================================================
+			-->
+			<xs:sequence>
+
+				<xs:element ref="name">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The display name for the spell
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+
+				<xs:element name="spellcost" type="richText">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The cost to cast the spell
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+
+				<xs:element name="spelltime" type="richText">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							How much time it takes to cast a spell
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+
+				<xs:element ref="description">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							A decription of how the spell works
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+
+				<xs:element name="spelldetails" type="richParagraphContainer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							Extra decription information of how the spell works
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+
+			</xs:sequence>
+			<!--
+			Attributes =========================================================
+			-->
+			<xs:attribute name="id" type="id_string" use="required">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The unique id for the spell
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

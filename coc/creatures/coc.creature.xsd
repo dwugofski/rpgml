@@ -117,14 +117,6 @@
 					</xs:complexType>
 				</xs:element>
 
-				<xs:element name="attacks" type="intNumeric">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							How many turns / round the creature can attack
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-
 				<xs:element name="specials" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation xml:lang="en">
@@ -165,13 +157,31 @@
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>
-							<xs:group ref="probabilityGroup"/>
-							<xs:element name="effect" type="richText">
+							<xs:element name="fight" maxOccurs="unbounded">
 								<xs:annotation>
 									<xs:documentation xml:lang="en">
-										The effect(s) dealt when fighting
+										Details for a specific fighting style
 									</xs:documentation>
 								</xs:annotation>
+								<xs:complexType mixed="false">
+									<xs:sequence>
+										<xs:group ref="namedProbabilityGroup"/>
+										<xs:element name="effect" type="richText" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation xml:lang="en">
+													The effect(s) dealt when fighting
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="attacks" type="intNumeric">
+											<xs:annotation>
+												<xs:documentation xml:lang="en">
+													How many times an attack of this type can be made
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
 							</xs:element>
 						</xs:sequence>
 					</xs:complexType>
@@ -347,7 +357,11 @@
 					<xs:enumeration value="constitution"/>
 					<xs:enumeration value="size"/>
 					<xs:enumeration value="dexterity"/>
+					<xs:enumeration value="appearance"/>
+					<xs:enumeration value="education"/>
+					<xs:enumeration value="intelligence"/>
 					<xs:enumeration value="power"/>
+					<xs:enumeration value="luck"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>

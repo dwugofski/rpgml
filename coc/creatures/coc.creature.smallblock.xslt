@@ -26,6 +26,7 @@
 
 			<!-- Give the Name, Subname of the creature -->
 			<div class="header">
+				<h2>NPC / Creature</h2>
 				<h1>
 					<!-- Give the Name of the creature in all caps -->
 					<xsl:call-template name="Tall_caps">
@@ -53,76 +54,101 @@
 
 			<!-- Give the core stats of the creature -->
 			<div class="core_stats">
-				<xsl:if test="./coc:sanity">
-					<!-- Sanity -->
-					<p>
+				<p>
+					<xsl:if test="./coc:sanity">
+						<!-- Sanity -->
 						<strong>SAN:</strong><xsl:text> </xsl:text>
 						<xsl:apply-templates select="./coc:sanity"/>
-					</p>
-				</xsl:if>
-				<p>
+						<xsl:text>, </xsl:text>
+					</xsl:if>
+
 					<!-- Hit points -->
 					<strong>HP:</strong><xsl:text> </xsl:text>
 					<xsl:apply-templates select="./coc:hitpoints"/>
-				</p>
-				<p>
-					<!-- Damage Bonus -->
-					<strong>Damage Bonus:</strong><xsl:text> </xsl:text>
-					<xsl:apply-templates select="./coc:damage-bonus"/>
-				</p>
-				<p>
+					<xsl:text>, </xsl:text>
+
+					<xsl:if test="./coc:magic">
+						<!-- Magic points -->
+						<strong>MP:</strong><xsl:text> </xsl:text>
+						<xsl:apply-templates select="./coc:magic"/>
+						<xsl:text>, </xsl:text>
+					</xsl:if>
+
 					<!-- Build -->
 					<strong>Build:</strong><xsl:text> </xsl:text>
 					<xsl:apply-templates select="./coc:build"/>
+
+					<xsl:if test="./coc:armor">
+						<!-- Armor -->
+						<xsl:text>, </xsl:text>
+						<strong>Armor:</strong>
+						<xsl:text> </xsl:text>
+						<xsl:apply-templates select="./coc:armor"/>
+						<xsl:text> (</xsl:text>
+						<xsl:value-of select="./coc:armor/coc:name"/>
+						<xsl:text>)</xsl:text>
+					</xsl:if>
+
+					<xsl:if test="./coc:horror">
+						<!-- Sanity loss -->
+						<xsl:text>, </xsl:text>
+						<strong>Sanity Loss:</strong>
+						<xsl:text> </xsl:text>
+						<xsl:apply-templates select="./coc:horror"/>
+					</xsl:if>
+
+					<xsl:if test="./coc:dodge">
+						<!-- Dodge -->
+						<xsl:text>, </xsl:text>
+						<strong>Dodge:</strong><xsl:text> </xsl:text>
+						<xsl:apply-templates select="./coc:dodge"/>
+					</xsl:if>
 				</p>
+			</div>
+
+			<!-- On-turn details -->
+			<div class="actions">
 				<p>
 					<!-- Move -->
 					<strong>Move:</strong><xsl:text> </xsl:text>
 					<xsl:apply-templates select="./coc:move"/>
+					<xsl:text>, </xsl:text>
+
+					<!-- Damage Bonus -->
+					<strong>Damage Bonus:</strong><xsl:text> </xsl:text>
+					<xsl:apply-templates select="./coc:damage-bonus"/>
 				</p>
-				<xsl:if test="./coc:horror">
-					<!-- Sanity loss -->
-					<p>
-						<strong>Sanity Loss:</strong>
-						<xsl:text> </xsl:text>
-						<xsl:apply-templates select="./coc:horror"/>
-					</p>
-				</xsl:if>
 			</div>
 
-			<!-- Actions, attacks, and maneuvers -->
-			<div class="actions">
-				<p>
-					<!-- Attacks -->
-					<strong>Attacks:</strong><xsl:text> </xsl:text>
-					<xsl:apply-templates select="./coc:attacks"/>
-				</p>
-				<xsl:if test="./coc:fighting">
-					<!-- Fighting -->
-					<p>
-						<strong>Fighting:</strong><xsl:text> </xsl:text>
-						<xsl:apply-templates select="./coc:fighting"/>
-					</p>
-				</xsl:if>
-				<xsl:if test="./coc:dodge">
-					<!-- Dodge -->
-					<p>
-						<strong>Dodge:</strong><xsl:text> </xsl:text>
-						<xsl:apply-templates select="./coc:dodge"/>
-					</p>
-				</xsl:if>
-				<xsl:if test="./coc:armor">
-					<!-- Armor -->
-					<p>
-						<strong>
-							<xsl:text>Armor (</xsl:text>
-							<xsl:value-of select="./coc:armor/coc:name"/>
-							<xsl:text>):</xsl:text>
-						</strong>
-						<xsl:text> </xsl:text>
-						<xsl:apply-templates select="./coc:armor"/>
-					</p>
-				</xsl:if>
+			<hr/>
+
+			<!-- Fighting Styles -->
+			<div class="fighting">
+				<xsl:choose>
+					<xsl:when test="count(./coc:fighting/coc:fight) > 1">
+						<p><strong>Fighting:</strong></p>
+						<ul>
+							<xsl:for-each select="./coc:fighting/coc:fight">
+								<li>
+									<strong><xsl:value-of select="./coc:name"/>:</strong>
+									<xsl:text> </xsl:text>
+									<xsl:apply-templates select="."/>
+								</li>
+							</xsl:for-each>
+						</ul>
+					</xsl:when>
+					<xsl:otherwise>
+						<p>
+							<strong>Fighting:</strong>
+							<xsl:text> </xsl:text>
+							<xsl:apply-templates select="./coc:fighting/coc:fight"/>
+						</p>
+					</xsl:otherwise>
+				</xsl:choose>
+			</div>
+
+			<!-- Maneuvers -->
+			<div class="maneuvers">
 				<xsl:apply-templates select="./coc:maneuvers/coc:maneuver"/>
 			</div>
 
@@ -163,9 +189,12 @@
 			</xsl:if>
 
 			<!-- Descriptive Flavor Text -->
-			<div class="specials">
-				<xsl:apply-templates select="./coc:specials/coc:special"/>
-			</div>
+			<xsl:if test="./coc:specials">
+				<hr/>
+				<div class="specials">
+					<xsl:apply-templates select="./coc:specials/coc:special"/>
+				</div>
+			</xsl:if>
 
 		</div>
 	</xsl:template>
@@ -181,7 +210,11 @@
 					<xsl:when test="@name = 'constitution'"><xsl:text>CON</xsl:text></xsl:when>
 					<xsl:when test="@name = 'size'"><xsl:text>SIZ</xsl:text></xsl:when>
 					<xsl:when test="@name = 'dexterity'"><xsl:text>DEX</xsl:text></xsl:when>
+					<xsl:when test="@name = 'appearance'"><xsl:text>APP</xsl:text></xsl:when>
+					<xsl:when test="@name = 'education'"><xsl:text>EDU</xsl:text></xsl:when>
+					<xsl:when test="@name = 'intelligence'"><xsl:text>INT</xsl:text></xsl:when>
 					<xsl:when test="@name = 'power'"><xsl:text>POW</xsl:text></xsl:when>
+					<xsl:when test="@name = 'luck'"><xsl:text>LUC</xsl:text></xsl:when>
 				</xsl:choose>
 			</strong>
 			<xsl:text> </xsl:text>
@@ -227,12 +260,19 @@
 	<!--**
 		Translates a modified value
 	-->
-	<xsl:template name="modifiedValue" match="coc:hitpoints | coc:damage-bonus | coc:build | coc:move | coc:alternate | coc:attacks | coc:fighting | coc:dodge | coc:armor | coc:skill | coc:sanity | coc:magic | coc:horror">
+	<xsl:template name="modifiedValue" match="coc:hitpoints | coc:damage-bonus | coc:build | coc:move | coc:alternate | coc:attacks | coc:fight | coc:dodge | coc:armor | coc:skill | coc:sanity | coc:magic | coc:horror | coc:attacks">
 		<xsl:apply-templates select="./coc:dec | ./coc:int | ./coc:roll | ./coc:na | ./coc:nan | ./coc:null | ./coc:varies | ./coc:chance"/>
 		<xsl:if test="./coc:modifier">
 			<xsl:text> (</xsl:text>
 			<xsl:apply-templates select="./coc:modifier"/>
 			<xsl:text>)</xsl:text>
+		</xsl:if>
+		<xsl:if test="./coc:attacks">
+			<xsl:if test="(./coc:attacks/coc:int > 1 or ./coc:attacks/coc:modifier)">
+				<xsl:text> (x</xsl:text>
+				<xsl:apply-templates select="./coc:attacks"/>
+				<xsl:text>)</xsl:text>
+			</xsl:if>
 		</xsl:if>
 		<xsl:if test="./coc:effect">
 			<xsl:text> </xsl:text>

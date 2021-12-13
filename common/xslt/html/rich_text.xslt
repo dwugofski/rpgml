@@ -2,7 +2,6 @@
 <xsl:stylesheet
 	version="3.0"
 	xmlns="http://www.w3.org/1999/html"
-	xmlns:rpgml="https://github.com/dwugofski/rpgml"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 	<!-- Documentation intended for XslDoc -->
@@ -16,49 +15,49 @@
 	<!--**
 		Displays integer data
 	-->
-	<xsl:template match='rpgml:int'>
+	<xsl:template match="*[local-name(.)='int']">
 		<span class="int"><xsl:value-of select="."/></span>
 	</xsl:template>
 
 	<!--**
 		Displays decimal data
 	-->
-	<xsl:template match='rpgml:dec'>
+	<xsl:template match="*[local-name(.)='dec']">
 		<span class="dec"><xsl:value-of select="."/></span>
 	</xsl:template>
 
 	<!--**
 		Displays boolean data
 	-->
-	<xsl:template match='rpgml:bool'>
+	<xsl:template match="*[local-name(.)='bool']">
 		<span class="bool"><xsl:value-of select="."/></span>
 	</xsl:template>
 
 	<!--**
 		Displays var information
 	-->
-	<xsl:template match='rpgml:var'>
+	<xsl:template match="*[local-name(.)='var']">
 		<span class="var"><xsl:value-of select="@ref"/></span>
 	</xsl:template>
 
 	<!--**
 		Displays roll data
 	-->
-	<xsl:template match='rpgml:roll'>
+	<xsl:template match="*[local-name(.)='roll']">
 		<span class="roll"><xsl:apply-templates/></span>
 	</xsl:template>
 
 	<!--**
 		Displays modifier information
 	-->
-	<xsl:template match='rpgml:modifier'>
+	<xsl:template match="*[local-name(.)='modifier']">
 		<span class="modifier"><xsl:apply-templates/></span>
 	</xsl:template>
 
 	<!--**
 		Displays extra information
 	-->
-	<xsl:template match='rpgml:extra'>
+	<xsl:template match="*[local-name(.)='extra']">
 		<span class="extra"><xsl:apply-templates/></span>
 	</xsl:template>
 
@@ -71,7 +70,7 @@
 	<!--**
 		Displays strong (i.e. bold) text
 	-->
-	<xsl:template match='rpgml:strong'>
+	<xsl:template match="*[local-name(.)='strong']">
 		<strong>
 			<xsl:apply-templates/>
 		</strong>
@@ -80,7 +79,7 @@
 	<!--**
 		Displays emphasized (i.e. italics) text
 	-->
-	<xsl:template match='rpgml:em'>
+	<xsl:template match="*[local-name(.)='em']">
 		<em>
 			<xsl:apply-templates/>
 		</em>
@@ -89,7 +88,7 @@
 	<!--**
 		Displays unarticulated (i.e. underlined) text
 	-->
-	<xsl:template match='rpgml:u'>
+	<xsl:template match="*[local-name(.)='u']">
 		<u>
 			<xsl:apply-templates/>
 		</u>
@@ -98,7 +97,7 @@
 	<!--**
 		Displays citational (i.e. underlined) text
 	-->
-	<xsl:template match='rpgml:cite'>
+	<xsl:template match="*[local-name(.)='cite']">
 		<cite>
 			<xsl:apply-templates/>
 		</cite>
@@ -107,7 +106,7 @@
 	<!--**
 		Displays marked (i.e. highlighted) text
 	-->
-	<xsl:template match='rpgml:mark'>
+	<xsl:template match="*[local-name(.)='mark']">
 		<mark>
 			<xsl:apply-templates/>
 		</mark>
@@ -116,7 +115,7 @@
 	<!--**
 		Displays a list item
 	-->
-	<xsl:template match='rpgml:li'>
+	<xsl:template match="*[local-name(.)='li']">
 		<li>
 			<xsl:apply-templates/>
 		</li>
@@ -125,7 +124,7 @@
 	<!--**
 		Displays an unordered (i.e. bulletted) list
 	-->
-	<xsl:template match='rpgml:ul'>
+	<xsl:template match="*[local-name(.)='ul']">
 		<ul>
 			<xsl:apply-templates/>
 		</ul>
@@ -134,7 +133,7 @@
 	<!--**
 		Displays an ordered (i.e. numbered) list
 	-->
-	<xsl:template match='rpgml:ol'>
+	<xsl:template match="*[local-name(.)='ol']">
 		<ol>
 			<xsl:apply-templates/>
 		</ol>
@@ -143,7 +142,7 @@
 	<!--**
 		Displays a paragraph of text
 	-->
-	<xsl:template match='rpgml:p'>
+	<xsl:template match="*[local-name(.)='p']">
 		<p>
 			<xsl:apply-templates/>
 		</p>

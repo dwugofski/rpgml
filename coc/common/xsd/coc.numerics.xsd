@@ -72,10 +72,10 @@
 		</xs:sequence>
 	</xs:complexType>
 
-	<xs:complexType name="namedProbability">
+	<xs:group name="namedProbabilityGroup">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				Represents a named probability for something to happen (e.g. a skill roll)
+				Group to represent a named probability for something to happen (e.g. a skill roll)
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -87,6 +87,17 @@
 				</xs:annotation>
 			</xs:element>
 			<xs:group ref="probabilityGroup"/>
+		</xs:sequence>
+	</xs:group>
+
+	<xs:complexType name="namedProbability">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Represents a named probability for something to happen (e.g. a skill roll)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="namedProbabilityGroup"/>
 		</xs:sequence>
 	</xs:complexType>
 

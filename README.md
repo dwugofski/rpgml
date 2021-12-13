@@ -9,6 +9,7 @@ framework:
 
 * Call of Cthulhu (7<sup>th</sup> Edition)
     * Creatures
+    * Spells
 * Pathfinder (2<sup>nd</sup> Edition) (Still being ported from old system)
     * Creatures
     * Items
