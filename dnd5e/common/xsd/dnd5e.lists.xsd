@@ -15,6 +15,78 @@
 
 	<!--
 	============================================================================
+	Skill Types
+	============================================================================
+	-->
+
+	<xs:simpleType name="skill">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The different skills available in Dungeons and Dragons 5e
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="acrobatics"/>
+			<xs:enumeration value="animal_handling"/>
+			<xs:enumeration value="arcana"/>
+			<xs:enumeration value="athletics"/>
+			<xs:enumeration value="deception"/>
+			<xs:enumeration value="history"/>
+			<xs:enumeration value="insight"/>
+			<xs:enumeration value="intimidation"/>
+			<xs:enumeration value="investigation"/>
+			<xs:enumeration value="medicine"/>
+			<xs:enumeration value="nature"/>
+			<xs:enumeration value="perception"/>
+			<xs:enumeration value="performance"/>
+			<xs:enumeration value="persuasion"/>
+			<xs:enumeration value="religion"/>
+			<xs:enumeration value="sleight_of_hand"/>
+			<xs:enumeration value="stealth"/>
+			<xs:enumeration value="survival"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="skill" type="skill"/>
+
+	<!--
+	============================================================================
+	Movement Types
+	============================================================================
+	-->
+
+	<xs:simpleType name="specialMoveType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The different ways a creature can move
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="burrow"/>
+			<xs:enumeration value="climb"/>
+			<xs:enumeration value="fly"/>
+			<xs:enumeration value="swim"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="specialMoveType" type="specialMoveType"/>
+
+	<xs:simpleType name="moveType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The different ways a creature can move
+			</xs:documentation>
+		</xs:annotation>
+		<xs:union memberTypes="specialMoveType">
+			<xs:simpleType>
+				<xs:restriction base="lower">
+					<xs:enumeration value="walk"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:element name="moveType" type="moveType"/>
+
+	<!--
+	============================================================================
 	Damage Types
 	============================================================================
 	-->

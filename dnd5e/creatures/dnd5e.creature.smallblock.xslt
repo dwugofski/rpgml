@@ -8,6 +8,7 @@
 	<xsl:import href="../../common/xslt/text_transform.xslt"/>
 	<xsl:import href="../../common/xslt/numerics.xslt"/>
 	<xsl:import href="../../common/xslt/html/rich_text.xslt"/>
+	<xsl:import href="../common/xslt/dnd5e.lists.xslt"/>
 
 	<!--xsl:output method="html" indent="no"/-->
 	<xsl:strip-space elements="*"/>
@@ -97,7 +98,7 @@
 						<xsl:if test="(position() > 1) or (count(../dnd:int) > 0)">
 							<xsl:text>, </xsl:text>
 						</xsl:if>
-						<xsl:value-of select="./dnd:name"/>
+						<xsl:value-of select="@type"/>
 						<xsl:text> </xsl:text>
 						<xsl:apply-templates select="./dnd:int"/>
 						<xsl:text> ft.</xsl:text>
@@ -118,12 +119,13 @@
 			<div class="statblockAbilities">
 				<table>
 					<tr>
-						<th>STR</th>
-						<th>DEX</th>
-						<th>CON</th>
-						<th>INT</th>
-						<th>WIS</th>
-						<th>CHA</th>
+						<xsl:for-each select="./dnd:abilities/dnd:ablval">
+							<th>
+								<xsl:call-template name="Tability_short">
+									<xsl:with-param name="ability" select="@type"/>
+								</xsl:call-template>
+							</th>
+						</xsl:for-each>
 					</tr>
 					<tr>
 						<xsl:for-each select="./dnd:abilities/dnd:ablval">
@@ -155,15 +157,17 @@
 			<div>
 				<!-- TODO: Saves -->
 
-				<xsl:if test="count(./dnd:skills/dnd:skill) > 0">
+				<xsl:if test="count(./dnd:skills/dnd:skillmod) > 0">
 					<p class="skills">
 						<strong>Skills</strong>
 						<xsl:text> </xsl:text>
-						<xsl:for-each select="./dnd:skills/dnd:skill">
+						<xsl:for-each select="./dnd:skills/dnd:skillmod">
 							<xsl:if test="position() > 1">
 								<xsl:text>, </xsl:text>
 							</xsl:if>
-							<xsl:value-of select="./dnd:name"/>
+							<xsl:call-template name="Tskill">
+								<xsl:with-param name="skill" select="@type"/>
+							</xsl:call-template>
 							<xsl:text> </xsl:text>
 							<xsl:call-template name="diff_int">
 								<xsl:with-param name="value" select="./dnd:int"/>
@@ -352,7 +356,7 @@
 			<xsl:when test=". = 'ng'">neutral good</xsl:when>
 			<xsl:when test=". = 'cg'">chaotic good</xsl:when>
 			<xsl:when test=". = 'ln'">lawful neutral</xsl:when>
-			<xsl:when test=". = 'nn'">true neutral</xsl:when>
+			<xsl:when test=". = 'nn'">neutral</xsl:when>
 			<xsl:when test=". = 'cn'">chaotic neutral</xsl:when>
 			<xsl:when test=". = 'le'">lawful evil</xsl:when>
 			<xsl:when test=". = 'ne'">neutral evil</xsl:when>

@@ -151,12 +151,19 @@
 	</xs:complexType>
 	<xs:element name="speed" type="speed"/>
 
-	<xs:element name="altspeed" type="namedIntNumeric">
+	<xs:element name="altspeed">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
 				An alternate, non-land speed
 			</xs:documentation>
 		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="intNumeric">
+					<xs:attribute name="type" type="specialMoveType"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
 	</xs:element>
 
 	<!--
@@ -227,12 +234,24 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="skill" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="skillmod" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="skills" type="skills"/>
 
-	<xs:element name="skill" type="namedIntNumeric"/>
+	<xs:complexType name="skillmod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A bonus applied to a skill
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="intNumeric">
+				<xs:attribute name="type" type="skill"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="skillmod" type="skillmod"/>
 
 	<!--
 	============================================================================
