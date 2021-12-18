@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="https://github.com/dwugofski/rpgml/dnd5e"
+	targetNamespace="https://github.com/dwugofski/rpgml/dnd5e"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<!--
+		Wrapper for numeric types
+	-->
+
+	<xs:include schemaLocation="../../../common/xsd/rpgml.base.xsd"/>
+
+	<xs:simpleType name="bonus">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A bonus applied to a check or roll
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="int"/>
+	</xs:simpleType>
+	<xs:element name="bonus" type="bonus"/>
+
+	<xs:simpleType name="dc">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The difficulty class of something
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:nonNegativeInteger"/>
+	</xs:simpleType>
+	<xs:element name="dc" type="dc"/>
+
+	<xs:element name="level" type="xs:nonNegativeInteger">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The level of a thing
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:simpleType name="ability">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The attributes a creature can have
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="strength"/>
+			<xs:enumeration value="dexterity"/>
+			<xs:enumeration value="constitution"/>
+			<xs:enumeration value="intelligence"/>
+			<xs:enumeration value="wisdom"/>
+			<xs:enumeration value="charisma"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="ability" type="ability"/>
+
+</xs:schema>

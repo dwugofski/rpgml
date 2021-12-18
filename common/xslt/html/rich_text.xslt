@@ -61,6 +61,17 @@
 		<span class="extra"><xsl:apply-templates/></span>
 	</xsl:template>
 
+	<!--**
+		Displays a link
+	-->
+	<xsl:template match="*[local-name(.)='link']">
+		<span class="link">
+			<xsl:attribute name="type"><xsl:value-of select="@type"/></xsl:attribute>
+			<xsl:attribute name="ref"><xsl:value-of select="@ref"/></xsl:attribute>
+			<xsl:apply-templates/>
+		</span>
+	</xsl:template>
+
 	<!-- 
 		========================================================================
 		Translate HTML-based rich text elements

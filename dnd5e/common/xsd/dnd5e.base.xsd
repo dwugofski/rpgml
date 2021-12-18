@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="https://github.com/dwugofski/rpgml/dnd5e"
+	targetNamespace="https://github.com/dwugofski/rpgml/dnd5e"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<!--
+		Wrapper to include all Dungeons and Dragons 5e XSD template includes
+	-->
+
+	<xs:include schemaLocation="./dnd5e.capabilities.xsd"/>
+
+</xs:schema>

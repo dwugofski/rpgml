@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="https://github.com/dwugofski/rpgml/dnd5e"
+	targetNamespace="https://github.com/dwugofski/rpgml/dnd5e"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:include schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="../common/xsd/dnd5e.base.xsd"/>
+
+	<!-- Template for Dungeons and Dragons 5e creatures -->
+
+	<!--
+	============================================================================
+	Creature Description Template
+	============================================================================
+	-->
+
+	<xs:element name="creature">
+		<xs:complexType>
+			<!--
+			Elements ===========================================================
+			-->
+			<xs:sequence>
+
+				<xs:element ref="name">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The display name for the creature
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="size"/>
+				<xs:element ref="creatureType"/>
+				<!-- If multiple creature types are supported, we may need to change this format -->
+				<xs:element ref="creatureSubtype" minOccurs="0"/>
+				<xs:element ref="alignment"/>
+				<xs:element name="ac" type="intNumeric">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The armor class for the creature, with specifics for armor type in the extra tag
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="hp"/>
+				<xs:element ref="speed"/>
+				<xs:element ref="abilities"/>
+				<xs:element ref="skills" minOccurs="0"/>
+				<xs:element ref="vulnerabilities" minOccurs="0"/>
+				<xs:element ref="resistances" minOccurs="0"/>
+				<xs:element ref="immunities" minOccurs="0"/>
+				<xs:element ref="condImmunities" minOccurs="0"/>
+				<xs:element ref="senses" minOccurs="0"/>
+				<xs:element ref="languages" minOccurs="0"/>
+				<xs:element ref="cr"/>
+				<xs:element name="feats" type="capabilityList" minOccurs="0"/>
+				<xs:element name="actions" type="capabilityList" minOccurs="0"/>
+				<xs:element name="legendaries" type="descCapabilityList" minOccurs="0"/>
+				<xs:element name="reactions" type="capabilityList" minOccurs="0"/>
+
+				<xs:element ref="description" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							A detailed description of background information on the creature
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+
+			</xs:sequence>
+			<!--
+			Attributes =========================================================
+			-->
+			<xs:attribute name="id" type="id_string" use="required">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The unique id for the creature
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<!--
+	============================================================================
+	Creature CR Type Definition
+	============================================================================
+	-->
+
+	<xs:simpleType name="cr">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The challenge rating (CR) for a creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:union>
+			<xs:simpleType>
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						If the challenge rating is not an integer
+					</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="plaintext">
+					<xs:enumeration value="1/8"/>
+					<xs:enumeration value="1/4"/>
+					<xs:enumeration value="1/2"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="xs:nonNegativeInteger"/>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:element name="cr" type="cr"/>
+
+	<!--
+	============================================================================
+	Creature Hit Points
+	============================================================================
+	-->
+
+	<xs:complexType name="hp">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The hit points for a creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="intGroup"/>
+			<xs:element ref="roll"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="hp" type="hp"/>
+
+	<!--
+	============================================================================
+	Creature Speed
+	============================================================================
+	-->
+
+	<xs:complexType name="speed">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The speed for a creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="intGroup" minOccurs="0"/>
+			<xs:element ref="altspeed" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="speed" type="speed"/>
+
+	<xs:element name="altspeed" type="namedIntNumeric">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				An alternate, non-land speed
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<!--
+	============================================================================
+	Creature Attributes
+	============================================================================
+	-->
+	
+	<xs:complexType name="abilities">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The list of abilities for the creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="ablval" minOccurs="6" maxOccurs="6"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="abilities" type="abilities">
+		<xs:unique name="uniqueAbilities">
+			<xs:selector xpath="ablval"/>
+			<xs:field xpath="@type"/>
+		</xs:unique>
+	</xs:element>
+
+	<xs:complexType name="ablval">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				An ability score and modifier for a creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="int">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The ability's score
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The ability's modifier. If not used, the value calculated from the score should be used
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="type" type="ability" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					Which of the 6 abilities this ablval element corresponds to
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:element name="ablval" type="ablval"/>
+
+	<!--
+	============================================================================
+	Creature Skills
+	============================================================================
+	-->
+
+	<xs:complexType name="skills">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Specially-modified skills for the creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="skill" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="skills" type="skills"/>
+
+	<xs:element name="skill" type="namedIntNumeric"/>
+
+	<!--
+	============================================================================
+	Creature Senses
+	============================================================================
+	-->
+
+	<xs:complexType name="senses">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Non-standard senses for the creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="pp" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The passive perception for the creature
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="sense" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="senses" type="senses"/>
+
+	<xs:complexType name="sense">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A special sense for the creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="intGroup">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The range and additional information about the sense
+					</xs:documentation>
+				</xs:annotation>
+			</xs:group>
+		</xs:sequence>
+		<xs:attribute name="type">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					The type for the sense
+				</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="lower">
+					<xs:enumeration value="blindsight"/>
+					<xs:enumeration value="darkvision"/>
+					<xs:enumeration value="tremorsense"/>
+					<xs:enumeration value="truesight"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:element name="sense" type="sense"/>
+
+	<!--
+	============================================================================
+	Creature Languages
+	============================================================================
+	-->
+
+	<xs:complexType name="languages">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The list of languages for a creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="language" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="languages" type="languages"/>
+
+	<xs:element name="language" type="plaintext">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A language or description of languages known to a creature
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<!--
+	============================================================================
+	Vulnerability, Resistance, and Immunity lists
+	============================================================================
+	-->
+
+	<xs:complexType name="damageTypeList">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of damage types
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="damageType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="specialDamageType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="customDamageType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="damageTypeList" type="damageTypeList"/>
+	<xs:element name="vulnerabilities" type="damageTypeList"/>
+	<xs:element name="resistances" type="damageTypeList"/>
+	<xs:element name="immunities" type="damageTypeList"/>
+
+	<xs:complexType name="conditionList">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of conditions
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="condition" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="conditionList" type="conditionList"/>
+	<xs:element name="condImmunities" type="conditionList"/>
+
+</xs:schema>

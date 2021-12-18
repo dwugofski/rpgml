@@ -10,6 +10,8 @@ framework:
 * Call of Cthulhu (7<sup>th</sup> Edition)
     * Creatures
     * Spells
+* Dungeons and Dragons (5<sup>th</sup> Edition)
+    * Creatures
 * Pathfinder (2<sup>nd</sup> Edition) (Still being ported from old system)
     * Creatures
     * Items

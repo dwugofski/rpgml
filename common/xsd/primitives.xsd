@@ -24,6 +24,7 @@
 		</xs:annotation>
 		<xs:restriction base="xs:token"/>
 	</xs:simpleType>
+	<xs:element name="str" type="plaintext"/>
 
 	<xs:simpleType name="lower">
 		<xs:annotation>

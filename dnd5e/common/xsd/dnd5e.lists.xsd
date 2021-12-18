@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="https://github.com/dwugofski/rpgml/dnd5e"
+	targetNamespace="https://github.com/dwugofski/rpgml/dnd5e"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<!--
+		Wrapper for types used to specify things belonging to a list of options
+	-->
+
+	<xs:include schemaLocation="../../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="./dnd5e.primitives.xsd"/>
+
+	<!--
+	============================================================================
+	Damage Types
+	============================================================================
+	-->
+
+	<xs:simpleType name="damageType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The different types of damage available in Dungeons and Dragons 5e
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="acid"/>
+			<xs:enumeration value="bludgeoning"/>
+			<xs:enumeration value="cold"/>
+			<xs:enumeration value="fire"/>
+			<xs:enumeration value="force"/>
+			<xs:enumeration value="lightning"/>
+			<xs:enumeration value="necrotic"/>
+			<xs:enumeration value="piercing"/>
+			<xs:enumeration value="posion"/>
+			<xs:enumeration value="psychic"/>
+			<xs:enumeration value="radiant"/>
+			<xs:enumeration value="slashing"/>
+			<xs:enumeration value="thunder"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="damageType" type="damageType"/>
+
+	<xs:simpleType name="specialDamageType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A damage type in Dungeons and Dragons 5e which is common, but not a specific damage type
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="nonmagical">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Bludgeoning, Piercing, and Slashing from Nonmagical Attacks.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="nonsilvered">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Bludgeoning, Piercing, and Slashing from Nonmagical Attacks that aren't silvered.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="specialDamageType" type="specialDamageType"/>
+
+	<xs:simpleType name="customDamageType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A custom damage type not common in Dungeons and Dragons 5e.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="plaintext"/>
+	</xs:simpleType>
+	<xs:element name="customDamageType" type="customDamageType"/>
+
+	<!--
+	============================================================================
+	Condition Types
+	============================================================================
+	-->
+
+	<xs:simpleType name="condition">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The different types of conditions in Dungeons and Dragons 5e
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="blinded"/>
+			<xs:enumeration value="charmed"/>
+			<xs:enumeration value="deafened"/>
+			<xs:enumeration value="exhaustion"/>
+			<xs:enumeration value="frightened"/>
+			<xs:enumeration value="grappled"/>
+			<xs:enumeration value="incapacitated"/>
+			<xs:enumeration value="invisible"/>
+			<xs:enumeration value="paralyzed"/>
+			<xs:enumeration value="petrified"/>
+			<xs:enumeration value="poisoned"/>
+			<xs:enumeration value="prone"/>
+			<xs:enumeration value="restrained"/>
+			<xs:enumeration value="stunned"/>
+			<xs:enumeration value="unconscious"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="condition" type="condition"/>
+
+	<!--
+	============================================================================
+	Creature Type and Subtype
+	============================================================================
+	-->
+
+	<xs:simpleType name="creatureType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The creature type for a creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="aberration"/>
+			<xs:enumeration value="beast"/>
+			<xs:enumeration value="celestial"/>
+			<xs:enumeration value="construct"/>
+			<xs:enumeration value="dragon"/>
+			<xs:enumeration value="elemental"/>
+			<xs:enumeration value="fey"/>
+			<xs:enumeration value="fiend"/>
+			<xs:enumeration value="giant"/>
+			<xs:enumeration value="humanoid"/>
+			<xs:enumeration value="monstrocity"/>
+			<xs:enumeration value="ooze"/>
+			<xs:enumeration value="plant"/>
+			<xs:enumeration value="undead"/>
+			<xs:enumeration value="custom"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="creatureType" type="creatureType"/>
+
+	<xs:element name="creatureSubtype" type="lower"/>
+
+	<!--
+	============================================================================
+	Creature Size
+	============================================================================
+	-->
+
+	<xs:simpleType name="size">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The size of a creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="tiny"/>
+			<xs:enumeration value="small"/>
+			<xs:enumeration value="medium"/>
+			<xs:enumeration value="large"/>
+			<xs:enumeration value="huge"/>
+			<xs:enumeration value="gargantuan"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="size" type="size"/>
+
+	<!--
+	============================================================================
+	Alignment
+	============================================================================
+	-->
+
+	<xs:simpleType name="alignment">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The alignment for a creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="plaintext">
+			<xs:enumeration value="unaligned"/>
+			<xs:enumeration value="any"/>
+			<xs:enumeration value="lg"/>
+			<xs:enumeration value="ng"/>
+			<xs:enumeration value="cg"/>
+			<xs:enumeration value="ln"/>
+			<xs:enumeration value="nn"/>
+			<xs:enumeration value="cn"/>
+			<xs:enumeration value="le"/>
+			<xs:enumeration value="ne"/>
+			<xs:enumeration value="ce"/>
+			<xs:enumeration value="~lg"/>
+			<xs:enumeration value="~ng"/>
+			<xs:enumeration value="~cg"/>
+			<xs:enumeration value="~ln"/>
+			<xs:enumeration value="~nn"/>
+			<xs:enumeration value="~cn"/>
+			<xs:enumeration value="~le"/>
+			<xs:enumeration value="~ne"/>
+			<xs:enumeration value="~ce"/>
+			<xs:enumeration value="l"/>
+			<xs:enumeration value="c"/>
+			<xs:enumeration value="g"/>
+			<xs:enumeration value="e"/>
+			<xs:enumeration value="~l"/>
+			<xs:enumeration value="~c"/>
+			<xs:enumeration value="~g"/>
+			<xs:enumeration value="~e"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="alignment" type="alignment"/>
+
+	<!--
+	============================================================================
+	Available Classes
+	============================================================================
+	-->
+
+	<xs:simpleType name="class">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The classes available for creatures
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="artificer"/>
+			<xs:enumeration value="barbarian"/>
+			<xs:enumeration value="bard"/>
+			<xs:enumeration value="cleric"/>
+			<xs:enumeration value="druid"/>
+			<xs:enumeration value="fighter"/>
+			<xs:enumeration value="monk"/>
+			<xs:enumeration value="paladin"/>
+			<xs:enumeration value="ranger"/>
+			<xs:enumeration value="rogue"/>
+			<xs:enumeration value="sorcerer"/>
+			<xs:enumeration value="wizard"/>
+			<xs:enumeration value="warlock"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="class" type="class"/>
+
+</xs:schema>

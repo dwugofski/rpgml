@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="https://github.com/dwugofski/rpgml/dnd5e"
+	targetNamespace="https://github.com/dwugofski/rpgml/dnd5e"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<!--
+		Wrapper for types used to specify what a something can do
+	-->
+
+	<xs:include schemaLocation="../../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="./dnd5e.lists.xsd"/>
+
+	<!--
+	============================================================================
+	Areas of Effect
+	============================================================================
+	-->
+
+	<xs:complexType name="area">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The area something effects
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="intNumeric">
+				<xs:attribute name="type">
+					<xs:simpleType>
+						<xs:restriction base="lower">
+							<xs:enumeration value="target">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">
+										The thing effects the specified number of targets
+									</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="area" type="area"/>
+
+	<!--
+	============================================================================
+	Attack details
+	============================================================================
+	-->
+
+	<xs:complexType name="constraint">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Limitation on how something can be used
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="plaintext">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						For custom, the text to display. For form, the form(s) to limit to. For day/long/short rest, the number of times per reset. For recharge, the minimum roll to recharge on. For cost, the number of actions it takes.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:attribute name="type" type="constraintType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The type of limitation
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:element name="constraint" type="constraint"/>
+
+	<xs:simpleType name="constraintType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				How a limitation works
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="custom">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The thing works in a special way
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="form">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The thing only works for certain forms for a shapeshifter
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="day">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The thing only works a certain number of times per day
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="longrest">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The thing only works a certain number of times per long rest
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="shortrest">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The thing only works a certain number of times per short rest
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="recharge">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The thing must be recharged before reuse
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="costs">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The thing must be recharged before reuse
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="constraintType" type="constraintType"/>
+
+	<xs:complexType name="range">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The range something can be sent
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="int">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The default range for the thing
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The extended range for the thing. For ranged attacks, this corresponds to the 'disadvantage' range
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="range" type="range"/>
+
+	<xs:element name="reach" type="int">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The distance a melee attack can reach
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<!--
+	============================================================================
+	Core attack structure
+	============================================================================
+	-->
+
+	<xs:complexType name="attack">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The structure of an attack specification
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="name">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The name of the attack
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="constraint" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Limitations on when the attack can be used
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="bonus">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The bonus applied to the attack
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="reach" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The reach of the attack, if it is a melee attack
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="range" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The range of the attack, if it is a range attack
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="area">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The area the attack effects
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="description">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						What the attack does on a hit
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="type">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					Whether this is a weapon or spell attack
+				</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="lower">
+					<xs:enumeration value="weapon"/>
+					<xs:enumeration value="spell"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:element name="attack" type="attack"/>
+
+	<!--
+	============================================================================
+	Feat description structure
+	============================================================================
+	-->
+
+	<xs:complexType name="feat">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A feature available to a creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="name">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The name of the feature
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="constraint" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						A limitation to how the feat can be used
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="description">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						A description of the feat
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="feat" type="feat"/>
+
+	<!--
+	============================================================================
+	Spellcasting structure
+	============================================================================
+	-->
+
+	<xs:complexType name="spellcasting">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The description of how a creature can cast spells
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="constraint" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						A limitation to how the creature can access spells
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="level">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The level of the spellcaster
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="ability">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The ability used by the spellcaster
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="class" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The class of the spellcaster's spells and spell slots
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="dc">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The DC of saves associated with these spells
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="bonus">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The attack bonus of spells case by this spellcaster
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="specialSpells" type="richText" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						A description of any special spells or conditions for spells available
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="slotPool" minOccurs="0"/>
+			<xs:element ref="spellList"/>
+			<xs:element ref="description" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Further text explaining the spells available
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="type" type="casterType" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					The way the spellcaster prepares and uses spells
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:element name="spellcasting" type="spellcasting"/>
+
+	<xs:simpleType name="casterType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The way a spellcaster prepares and uses spells
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="prepared">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The spellcaster prepares spells every day (e.g. wizard, cleric, druid)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="spontaneous">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The spellcaster has access to all spells and does not need to prepare (e.g. sorcerer)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="pooled">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The spellcaster has access to all spells, and its spell slots are all at one level (e.g. warlock)
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="casterType" type="casterType"/>
+
+	<xs:complexType name="slotPool">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The description of the spell slot pool available to the caster
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="level">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The level of the slots available
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="int">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The number of spells at that level available
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="slotPool" type="slotPool"/>
+
+	<xs:complexType name="spellList">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of spells available to a spellcaster
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="spellLevelList" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="spellList" type="spellList"/>
+
+	<xs:complexType name="spellLevelList">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The list of spells available to a spellcaster at a given level
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="level">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The level under consideration
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The number of spell slots available at the given level (0 for at-will); not needed for pooled casters
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="link" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The link to the spell available
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="spellLevelList" type="spellLevelList"/>
+
+	<!--
+	============================================================================
+	Capability list structure
+	============================================================================
+	-->
+
+	<xs:group name="capabilityListGroup">
+		<xs:sequence>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="attack"/>
+				<xs:element ref="feat"/>
+				<xs:element ref="spellcasting"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+
+	<xs:complexType name="capabilityList">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of things something can do
+			</xs:documentation>
+		</xs:annotation>
+		<xs:group ref="capabilityListGroup" minOccurs="0"/>
+	</xs:complexType>
+
+	<xs:complexType name="descCapabilityList">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of things something can do
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="description"/>
+			<xs:group ref="capabilityListGroup"/>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>
