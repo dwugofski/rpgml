@@ -46,6 +46,7 @@
 				<xs:element ref="hp"/>
 				<xs:element ref="speed"/>
 				<xs:element ref="abilities"/>
+				<xs:element ref="saves" minOccurs="0"/>
 				<xs:element ref="skills" minOccurs="0"/>
 				<xs:element ref="vulnerabilities" minOccurs="0"/>
 				<xs:element ref="resistances" minOccurs="0"/>
@@ -220,6 +221,38 @@
 		</xs:attribute>
 	</xs:complexType>
 	<xs:element name="ablval" type="ablval"/>
+
+	<!--
+	============================================================================
+	Creature Skills
+	============================================================================
+	-->
+
+	<xs:complexType name="saves">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Specially-modified saves for the creature
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="savemod" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="saves" type="saves"/>
+
+	<xs:complexType name="savemod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A bonus applied to a save
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="intNumeric">
+				<xs:attribute name="type" type="ability"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="savemod" type="savemod"/>
 
 	<!--
 	============================================================================

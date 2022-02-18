@@ -15,6 +15,29 @@
 
 	<!--
 	============================================================================
+	Abilities
+	============================================================================
+	-->
+
+	<xs:simpleType name="ability">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The attributes a creature can have
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="strength"/>
+			<xs:enumeration value="dexterity"/>
+			<xs:enumeration value="constitution"/>
+			<xs:enumeration value="intelligence"/>
+			<xs:enumeration value="wisdom"/>
+			<xs:enumeration value="charisma"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="ability" type="ability"/>
+
+	<!--
+	============================================================================
 	Skill Types
 	============================================================================
 	-->
@@ -106,7 +129,7 @@
 			<xs:enumeration value="lightning"/>
 			<xs:enumeration value="necrotic"/>
 			<xs:enumeration value="piercing"/>
-			<xs:enumeration value="posion"/>
+			<xs:enumeration value="poison"/>
 			<xs:enumeration value="psychic"/>
 			<xs:enumeration value="radiant"/>
 			<xs:enumeration value="slashing"/>
@@ -313,5 +336,120 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:element name="class" type="class"/>
+
+	<!--
+	============================================================================
+	Types of Actions
+	============================================================================
+	-->
+
+	<xs:simpleType name="actionType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Types of actions
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="free"/>
+			<xs:enumeration value="action"/>
+			<xs:enumeration value="reaction"/>
+			<xs:enumeration value="bonus"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="actionType" type="actionType"/>
+
+	<!--
+	============================================================================
+	Types of Duration
+	============================================================================
+	-->
+
+	<xs:simpleType name="durationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A type of duration something can last
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="instantaneous"/>
+			<xs:enumeration value="turn"/>
+			<xs:enumeration value="round"/>
+			<xs:enumeration value="second"/>
+			<xs:enumeration value="minute"/>
+			<xs:enumeration value="hour"/>
+			<xs:enumeration value="month"/>
+			<xs:enumeration value="year"/>
+			<xs:enumeration value="decade"/>
+			<xs:enumeration value="century"/>
+			<xs:enumeration value="millenium"/>
+			<xs:enumeration value="eternity"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="durationType" type="durationType"/>
+
+	<xs:group name="durationGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A group for fully specifying the duration of something
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="int">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The number of units of time the duration lasts
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="durationType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The units of time the duration lasts
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:group ref="numericAddendumGroup">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Any additional information on the duration
+					</xs:documentation>
+				</xs:annotation>
+			</xs:group>
+		</xs:sequence>
+	</xs:group>
+
+	<xs:complexType name="duration">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A full specification for the duration of something
+			</xs:documentation>
+		</xs:annotation>
+		<xs:group ref="durationGroup"/>
+	</xs:complexType>
+	<xs:element name="duration" type="duration"/>
+
+	<!--
+	============================================================================
+	Schools of Magic
+	============================================================================
+	-->
+
+	<xs:simpleType name="school">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The schools of magic available
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="abjuration"/>
+			<xs:enumeration value="conjuration"/>
+			<xs:enumeration value="divination"/>
+			<xs:enumeration value="enchantment"/>
+			<xs:enumeration value="evocation"/>
+			<xs:enumeration value="illusion"/>
+			<xs:enumeration value="necromancy"/>
+			<xs:enumeration value="transmutation"/>
+		</xs:restriction>
+	</xs:simpleType>
 
 </xs:schema>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="https://github.com/dwugofski/rpgml/dnd5e"
+	targetNamespace="https://github.com/dwugofski/rpgml/dnd5e"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:include schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="../common/xsd/dnd5e.base.xsd"/>
+
+	<!-- Template for Dungeons and Dragons 5e spells -->
+
+	<!--
+	============================================================================
+	Spell Schema
+	============================================================================
+	-->
+
+	<xs:element name="spell">
+		<xs:complexType>
+			<!--
+			Elements ===========================================================
+			-->
+			<xs:sequence>
+
+				<xs:element ref="name">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The display name for the spell
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="level">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The level for the spell, with "0" corresponding to a cantrip
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ritual" minOccurs="0"/>
+				<xs:element name="concentration" minOccurs="0"/>
+				<xs:element ref="castingTime"/>
+				<xs:element ref="range"/>
+				<xs:element ref="area"/>
+				<xs:element ref="components"/>
+				<xs:element ref="duration"/>
+				<xs:element ref="school"/>
+				<xs:element ref="spellRoll"/>
+				<xs:element ref="description"/>
+
+			</xs:sequence>
+			<!--
+			Attributes =========================================================
+			-->
+			<xs:attribute name="id" type="id_string" use="required">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The unique id for the spell
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<!--
+	============================================================================
+	Casting Time Schema
+	============================================================================
+	-->
+
+	<xs:complexType name="castingTime">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The amount of time it takes to cast a spell
+			</xs:documentation>
+		</xs:annotation>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element ref="actionType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								The type of action it takes to cast.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:group ref="numericAddendumGroup">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								Any additional information on the casting time
+							</xs:documentation>
+						</xs:annotation>
+					</xs:group>
+				</xs:sequence>
+				<xs:group ref="durationGroup">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							If the casting time is not just an action, but a duration...
+						</xs:documentation>
+					</xs:annotation>
+				</xs:group>
+				<xs:element ref="str">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							Any non-standard description of duration
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+	</xs:complexType>
+	<xs:element name="castingTime" type="castingTime"/>
+
+	<!--
+	============================================================================
+	Components Schema
+	============================================================================
+	-->
+
+	<xs:complexType name="components">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The components for a spell
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="component" maxOccurs="3"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="components" type="components">
+		<xs:unique name="uniqueComponents">
+			<xs:selector xpath="./*"/>
+			<xs:field xpath="@type"/>
+		</xs:unique>
+	</xs:element>
+
+	<xs:complexType name="component">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A specific component for a spell. Text is only required for material components
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:restriction base="plaintext">
+				<xs:attribute name="type">
+					<xs:simpleType>
+						<xs:restriction base="lower">
+							<xs:enumeration value="verbal"/>
+							<xs:enumeration value="somatic"/>
+							<xs:enumeration value="material"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:element name="component" type="component"/>
+
+	<!--
+	============================================================================
+	The roll in response to a spell
+	============================================================================
+	-->
+
+	<xs:simpleType name="spellRoll">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				What must be rolled in response to a spell
+			</xs:documentation>
+		</xs:annotation>
+		<xs:union memberTypes="ability">
+			<xs:simpleType>
+				<xs:restriction base="lower">
+					<xs:enumeration value="melee"/>
+					<xs:enumeration value="ranged"/>
+					<xs:enumeration value="none"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:element name="spellRoll" type="spellRoll"/>
+
+</xs:schema>

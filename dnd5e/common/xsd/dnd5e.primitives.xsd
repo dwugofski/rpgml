@@ -40,21 +40,4 @@
 		</xs:annotation>
 	</xs:element>
 
-	<xs:simpleType name="ability">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				The attributes a creature can have
-			</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="lower">
-			<xs:enumeration value="strength"/>
-			<xs:enumeration value="dexterity"/>
-			<xs:enumeration value="constitution"/>
-			<xs:enumeration value="intelligence"/>
-			<xs:enumeration value="wisdom"/>
-			<xs:enumeration value="charisma"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:element name="ability" type="ability"/>
-
 </xs:schema>

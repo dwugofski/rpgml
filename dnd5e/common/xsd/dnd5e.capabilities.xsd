@@ -27,6 +27,15 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="intNumeric">
+				<xs:sequence>
+					<xs:element ref="int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+								A second distance metric for the area
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
 				<xs:attribute name="type">
 					<xs:simpleType>
 						<xs:restriction base="lower">
@@ -34,6 +43,48 @@
 								<xs:annotation>
 									<xs:documentation xml:lang="en">
 										The thing effects the specified number of targets
+									</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="sphere">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">
+										The thing effects a sphere of a given radius
+									</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="cube">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">
+										The thing effects a cube of a given length/width/heigh
+									</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="square">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">
+										The thing effects a square of a given length/width
+									</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="cone">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">
+										The thing effects a cone of a given length
+									</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="line">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">
+										The thing effects a line of a given length and (secondary) width
+									</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="cylinder">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">
+										The thing effects a cylinder of a given radius and (secondary) height
 									</xs:documentation>
 								</xs:annotation>
 							</xs:enumeration>
@@ -142,22 +193,24 @@
 				The range something can be sent
 			</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element ref="int">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						The default range for the thing
-					</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element ref="int" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						The extended range for the thing. For ranged attacks, this corresponds to the 'disadvantage' range
-					</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-		</xs:sequence>
+		<xs:choice>
+			<xs:sequence>
+				<xs:element ref="int">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The default range for the thing. "0" = "Touch," and "-1" = "Self"
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="int" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The extended range for the thing. For ranged attacks, this corresponds to the 'disadvantage' range
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:choice>
 	</xs:complexType>
 	<xs:element name="range" type="range"/>
 
@@ -306,7 +359,7 @@
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element ref="level">
+			<xs:element ref="level" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
 						The level of the spellcaster
@@ -334,7 +387,7 @@
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element ref="bonus">
+			<xs:element ref="bonus" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
 						The attack bonus of spells case by this spellcaster
@@ -396,6 +449,13 @@
 					</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
+			<xs:enumeration value="daily">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The spellcaster has access to a certain number of spells per day.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:element name="casterType" type="casterType"/>
@@ -444,7 +504,7 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="level">
+			<xs:element ref="level" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
 						The level under consideration

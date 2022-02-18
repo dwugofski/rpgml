@@ -157,6 +157,30 @@
 			<div>
 				<!-- TODO: Saves -->
 
+				<xsl:if test="count(./dnd:saves/dnd:savemod) > 0">
+					<p class="saves">
+						<strong>Saving Throws</strong>
+						<xsl:text> </xsl:text>
+						<xsl:for-each select="./dnd:saves/dnd:savemod">
+							<xsl:if test="position() > 1">
+								<xsl:text>, </xsl:text>
+							</xsl:if>
+							<xsl:call-template name="Tability_short">
+								<xsl:with-param name="ability" select="@type"/>
+							</xsl:call-template>
+							<xsl:text> </xsl:text>
+							<xsl:call-template name="diff_int">
+								<xsl:with-param name="value" select="./dnd:int"/>
+							</xsl:call-template>
+							<xsl:if test="./dnd:modifier">
+								<xsl:text> (</xsl:text>
+								<xsl:apply-templates select="./dnd:modifier"/>
+								<xsl:text>)</xsl:text>
+							</xsl:if>
+						</xsl:for-each>
+					</p>
+				</xsl:if>
+
 				<xsl:if test="count(./dnd:skills/dnd:skillmod) > 0">
 					<p class="skills">
 						<strong>Skills</strong>
@@ -565,7 +589,81 @@
 					</xsl:if>
 					<xsl:text>.</xsl:text>
 				</strong>
-				<xsl:text> This creature is a </xsl:text>
+				<xsl:text> This creature</xsl:text>
+				<xsl:choose>
+					<xsl:when test="./dnd:level">
+						<xsl:text> is a </xsl:text>
+						<xsl:call-template name="ordinal">
+							<xsl:with-param name="value" select="./dnd:level"/>
+						</xsl:call-template>
+						<xsl:text>-level spellcaster. Its </xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>'s </xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>spellcasting modifier is </xsl:text>
+				<xsl:call-template name="Tcapitalize">
+					<xsl:with-param name="text" select="./dnd:ability"/>
+				</xsl:call-template>
+				<xsl:text> (spell save DC </xsl:text>
+				<xsl:value-of select="./dnd:dc"/>
+				<xsl:if test="./dnd:bonus">
+					<xsl:text>, </xsl:text>
+					<xsl:call-template name="diff_int">
+						<xsl:with-param name="value" select="./dnd:bonus"/>
+					</xsl:call-template>
+					<xsl:text> to hit with spell attacks</xsl:text>
+				</xsl:if>
+				<xsl:text>). </xsl:text>
+				<xsl:if test="./dnd:specialSpells">
+					<xsl:apply-templates select="./dnd:specialSpells/node()"/>
+					<xsl:text>. </xsl:text>
+				</xsl:if>
+				<xsl:choose>
+					<xsl:when test="@type = 'prepared'">
+						<xsl:text>It has the following </xsl:text>
+						<xsl:if test="./dnd:class">
+							<xsl:value-of select="./dnd:class"/>
+							<xsl:text> </xsl:text>
+						</xsl:if>
+						<xsl:text>spells prepared:</xsl:text>
+					</xsl:when>
+					<xsl:when test="@type = 'spontaneous'">
+						<xsl:text>It knows the following </xsl:text>
+						<xsl:if test="./dnd:class">
+							<xsl:value-of select="./dnd:class"/>
+							<xsl:text> </xsl:text>
+						</xsl:if>
+						<xsl:text>spells:</xsl:text>
+					</xsl:when>
+					<xsl:when test="@type = 'pooled'">
+						<xsl:text>It has </xsl:text>
+						<xsl:call-template name="num_to_word">
+							<xsl:with-param name="value" select="./dnd:slotPool/dnd:int"/>
+						</xsl:call-template>
+						<xsl:text> </xsl:text>
+						<xsl:call-template name="ordinal">
+							<xsl:with-param name="value" select="./dnd:slotPool/dnd:level"/>
+						</xsl:call-template>
+						<xsl:text>-level spell slots, which it regains after a short or long rest, and knows the following </xsl:text>
+						<xsl:if test="./dnd:class">
+							<xsl:value-of select="./dnd:class"/>
+							<xsl:text> </xsl:text>
+						</xsl:if>
+						<xsl:text>spells:</xsl:text>
+					</xsl:when>
+					<xsl:when test="@type = 'daily'">
+						<xsl:text>It can innately cast the following </xsl:text>
+						<xsl:if test="./dnd:class">
+							<xsl:value-of select="./dnd:class"/>
+							<xsl:text> </xsl:text>
+						</xsl:if>
+						<xsl:text>spells, requiring no material components:</xsl:text>
+					</xsl:when>
+				</xsl:choose>
+
+				<!--<xsl:text> This creature is a </xsl:text>
 				<xsl:call-template name="ordinal">
 					<xsl:with-param name="value" select="./dnd:level"/>
 				</xsl:call-template>
@@ -608,36 +706,56 @@
 						<xsl:value-of select="./dnd:class"/>
 						<xsl:text> spells:</xsl:text>
 					</xsl:when>
-				</xsl:choose>
+					<xsl:when test="@type = 'innate'">
+						<xsl:text>It can innately cast the following spells, requiring no material components:</xsl:text>
+					</xsl:when>
+				</xsl:choose>-->
+
 			</p>
+
 			<xsl:for-each select="./dnd:spellList/dnd:spellLevelList">
 				<p class="spellLevelList">
 					<xsl:choose>
-						<xsl:when test="number(./dnd:level) = 0">
-							<xsl:text>Cantrips (at will): </xsl:text>
+						<xsl:when test="../../@type = 'daily'">
+							<xsl:choose>
+								<xsl:when test="number(./dnd:int) = 0">
+									<xsl:text>At will: </xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="./dnd:int"/>
+									<xsl:text>/day: </xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:call-template name="ordinal">
-								<xsl:with-param name="value" select="./dnd:level"/>
-							</xsl:call-template>
-							<xsl:text>-level</xsl:text>
-							<xsl:if test="./dnd:int">
-								<xsl:text> (</xsl:text>
-								<xsl:choose>
-									<xsl:when test="number(./dnd:int) = 0">
-										<xsl:text>at will</xsl:text>
-									</xsl:when>
-									<xsl:when test="number(./dnd:int) = 1">
-										<xsl:text>1 slot</xsl:text>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="./dnd:int"/>
-										<xsl:text> slots</xsl:text>
-									</xsl:otherwise>
-								</xsl:choose>
-								<xsl:text>)</xsl:text>
-							</xsl:if>
-							<xsl:text>: </xsl:text>
+							<xsl:choose>
+								<xsl:when test="number(./dnd:level) = 0">
+									<xsl:text>Cantrips (at will): </xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:call-template name="ordinal">
+										<xsl:with-param name="value" select="./dnd:level"/>
+									</xsl:call-template>
+									<xsl:text>-level</xsl:text>
+									<xsl:if test="./dnd:int">
+										<xsl:text> (</xsl:text>
+										<xsl:choose>
+											<xsl:when test="number(./dnd:int) = 0">
+												<xsl:text>at will</xsl:text>
+											</xsl:when>
+											<xsl:when test="number(./dnd:int) = 1">
+												<xsl:text>1 slot</xsl:text>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="./dnd:int"/>
+												<xsl:text> slots</xsl:text>
+											</xsl:otherwise>
+										</xsl:choose>
+										<xsl:text>)</xsl:text>
+									</xsl:if>
+									<xsl:text>: </xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
 						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:for-each select="./dnd:link">
