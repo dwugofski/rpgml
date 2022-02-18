@@ -293,49 +293,63 @@
 					</xsl:choose>
 				</p>
 
-				<p class="cr">
-					<strong>Challenge</strong>
-					<xsl:text> </xsl:text>
-					<xsl:value-of select="./dnd:cr"/>
-					<xsl:text> (</xsl:text>
-					<xsl:choose>
-						<xsl:when test="./dnd:cr = '0'"><xsl:text>0</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '1/8'"><xsl:text>25</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '1/4'"><xsl:text>50</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '1/2'"><xsl:text>100</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '1'"><xsl:text>200</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '2'"><xsl:text>450</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '3'"><xsl:text>700</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '4'"><xsl:text>1,100</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '5'"><xsl:text>1,800</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '6'"><xsl:text>2,300</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '7'"><xsl:text>2,900</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '8'"><xsl:text>3,900</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '9'"><xsl:text>5,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '10'"><xsl:text>5,900</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '11'"><xsl:text>7,200</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '12'"><xsl:text>8,400</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '13'"><xsl:text>10,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '14'"><xsl:text>11,500</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '15'"><xsl:text>13,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '16'"><xsl:text>15,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '17'"><xsl:text>18,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '18'"><xsl:text>20,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '19'"><xsl:text>22,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '20'"><xsl:text>25,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '21'"><xsl:text>33,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '22'"><xsl:text>41,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '23'"><xsl:text>50,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '24'"><xsl:text>62,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '25'"><xsl:text>75,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '26'"><xsl:text>90,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '27'"><xsl:text>105,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '28'"><xsl:text>120,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '29'"><xsl:text>135,000</xsl:text></xsl:when>
-						<xsl:when test="./dnd:cr = '30'"><xsl:text>155,000</xsl:text></xsl:when>
-					</xsl:choose>
-					<xsl:text> XP)</xsl:text>
-				</p>
+				<xsl:if test="./dnd:proficiency">
+					<div class="fr">
+						<p class="proficiency">
+							<strong>Proficiency Bonus</strong>
+							<xsl:text> </xsl:text>
+							<xsl:call-template name="diff_int">
+								<xsl:with-param name="value" select="./dnd:proficiency"/>
+							</xsl:call-template>
+						</p>
+					</div>
+				</xsl:if>
+				<div class="fl">
+					<p class="cr">
+						<strong>Challenge</strong>
+						<xsl:text> </xsl:text>
+						<xsl:value-of select="./dnd:cr"/>
+						<xsl:text> (</xsl:text>
+						<xsl:choose>
+							<xsl:when test="./dnd:cr = '0'"><xsl:text>0</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '1/8'"><xsl:text>25</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '1/4'"><xsl:text>50</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '1/2'"><xsl:text>100</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '1'"><xsl:text>200</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '2'"><xsl:text>450</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '3'"><xsl:text>700</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '4'"><xsl:text>1,100</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '5'"><xsl:text>1,800</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '6'"><xsl:text>2,300</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '7'"><xsl:text>2,900</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '8'"><xsl:text>3,900</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '9'"><xsl:text>5,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '10'"><xsl:text>5,900</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '11'"><xsl:text>7,200</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '12'"><xsl:text>8,400</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '13'"><xsl:text>10,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '14'"><xsl:text>11,500</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '15'"><xsl:text>13,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '16'"><xsl:text>15,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '17'"><xsl:text>18,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '18'"><xsl:text>20,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '19'"><xsl:text>22,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '20'"><xsl:text>25,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '21'"><xsl:text>33,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '22'"><xsl:text>41,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '23'"><xsl:text>50,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '24'"><xsl:text>62,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '25'"><xsl:text>75,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '26'"><xsl:text>90,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '27'"><xsl:text>105,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '28'"><xsl:text>120,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '29'"><xsl:text>135,000</xsl:text></xsl:when>
+							<xsl:when test="./dnd:cr = '30'"><xsl:text>155,000</xsl:text></xsl:when>
+						</xsl:choose>
+						<xsl:text> XP)</xsl:text>
+					</p>
+				</div>
+				<div class="clearer"/>
 			</div>
 			<hr/>
 

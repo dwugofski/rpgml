@@ -55,6 +55,7 @@
 				<xs:element ref="senses" minOccurs="0"/>
 				<xs:element ref="languages" minOccurs="0"/>
 				<xs:element ref="cr"/>
+				<xs:element name="proficiency" type="bonus" minOccurs="0"/>
 				<xs:element name="feats" type="capabilityList" minOccurs="0"/>
 				<xs:element name="actions" type="capabilityList" minOccurs="0"/>
 				<xs:element name="legendaries" type="descCapabilityList" minOccurs="0"/>
