@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns='https://github.com/dwugofski/rpgml/p2e'
+	targetNamespace='https://github.com/dwugofski/rpgml/p2e'
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<!--
+		Wrapper for types associated with the Activate rich text block
+	-->
+
+	<xs:import schemaLocation="../../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="./p2e.rich_text.xsd"/>
+
+	<xs:complexType name="activate">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Description of how to activate an item
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="action">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Outlines the action or activity that is required to activate this item
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="frequency" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Outlines how often the item can be activated
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="effect" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Describes the effect of activation.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:group ref="descriptionGroup"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

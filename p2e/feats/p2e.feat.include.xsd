@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:rpgml="https://github.com/dwugofski/rpgml"
+	xmlns='https://github.com/dwugofski/rpgml/p2e'
+	targetNamespace='https://github.com/dwugofski/rpgml/p2e'
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:include schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="../common/xsd/p2e.base.xsd"/>
+
+	<!--
+	============================================================================
+	FEAT DESCRIPTION TEMPLATE
+	============================================================================
+	-->
+
+	<xs:complexType name="feat">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The description entry for a feat.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="name">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The display name of the feat.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="level" type="level"/>
+
+			<xs:element name="actCount" type="actCount">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						How many actions (if any) the feat requires.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element ref="traits" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The traits the feat has.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			
+			<xs:element name="prereqs" type="reqs" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Any minimum ability scores, feats, proficiency ranks, or
+						other prerequisites you must have before you can access
+						this rule element are listed here. Feats also have a
+						level prerequisite, which appears above.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="frequency" type="richText" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						This is the limit on how many times you can use the
+						ability within a given time.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="trigger" type="richText" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Reactions and some free actions have triggers that must
+						be met before they can be used.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="cost" type="richText" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Some action feats have costs associated with taking the
+						action.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			
+			<xs:element name="reqs" type="reqs" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Sometimes you must have a certain item or be in a
+						certain circumstance to use an ability. If so, it’s
+						listed in this section.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="description" type="description">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						This section describes the effects or benefits of a rule
+						element. If the rule is an action, it explains what the
+						effect is or what you must roll to determine the effect.
+						If it’s a feat that modifies an existing action or
+						grants a constant effect, the benefit is explained here.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="special" type="description" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Any special qualities of the rule are explained in this
+						section. Usually this section appears in feats you can
+						select more than once, explaining what happens when you
+						do.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+		<xs:attribute name="id" type="id_string" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					A unique identifier for the feat.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+	<!--
+	============================================================================
+	FEAT LIST TYPE
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Types to outline a list of feat summaries
+	-->
+
+	<xs:complexType name="feats">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of feat summaries.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="featSum" type="featSummary"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="featSummary">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The description entry for a feat's description text.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="name">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The display name of the feat.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="actCount" type="actCount">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						How many actions (if any) the feat requires.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element ref="traits" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The traits the feat has.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="frequency" type="richText" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						This is the limit on how many times you can use the
+						ability within a given time.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="trigger" type="richText" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Reactions and some free actions have triggers that must
+						be met before they can be used.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="description" type="description">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						This section describes the effects or benefits of a rule
+						element. If the rule is an action, it explains what the
+						effect is or what you must roll to determine the effect.
+						If it’s a feat that modifies an existing action or
+						grants a constant effect, the benefit is explained here.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="special" type="description" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Any special qualities of the rule are explained in this
+						section. Usually this section appears in feats you can
+						select more than once, explaining what happens when you
+						do.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

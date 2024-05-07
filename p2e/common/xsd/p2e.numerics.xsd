@@ -10,7 +10,8 @@
 		Wrapper for types associated with numeric values in P2E
 	-->
 
-	<xs:import schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+	<xs:import schemaLocation="../../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="./p2e.rich_text.xsd"/>
 
 	<!--
 	============================================================================
@@ -28,37 +29,36 @@
 				The specification of a type of currency
 			</xs:documentation>
 		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="lower">
-				<xs:enumeration value="cp">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							Copper pieces (base).
-						</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="sp">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							Silver pieces (1sp = 10cp).
-						</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="gp">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							Gold pieces (1gp = 100cp).
-						</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-				<xs:enumeration value="pp">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							Platinum pieces (1pp = 1,000cp).
-						</xs:documentation>
-					</xs:annotation>
-				</xs:enumeration>
-			</xs:restriction>
+		<xs:restriction base="lower">
+			<xs:enumeration value="cp">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Copper pieces (base).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="sp">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Silver pieces (1sp = 10cp).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="gp">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Gold pieces (1gp = 100cp).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="pp">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Platinum pieces (1pp = 1,000cp).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
 	</xs:simpleType>
 	<xs:element name="coin" type="coin"/>
 
@@ -93,6 +93,7 @@
 				The monetary cost associated with an entity
 			</xs:documentation>
 		</xs:annotation>
+		<xs:group ref="priceGroup"/>
 	</xs:complexType>
 
 </xs:schema>

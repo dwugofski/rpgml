@@ -8,7 +8,8 @@
 
 	<!-- Wrapper for types associated with the core mechanics of the system -->
 
-	<xs:include schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="../../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="./p2e.rich_text.xsd"/>
 
 	<!--
 	============================================================================
@@ -16,7 +17,7 @@
 	============================================================================
 	-->
 
-	<xs:simpleType name="actcount">
+	<xs:simpleType name="actCount">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
 				Specifies how many actions or what type of action an Action takes.
@@ -28,6 +29,8 @@
 					<xs:enumeration value="reaction"/>
 					<xs:enumeration value="passive"/>
 					<xs:enumeration value="free"/>
+					<xs:enumeration value="exploration"/>
+					<xs:enumeration value="downtime"/>
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
@@ -37,7 +40,7 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
-	<xs:element name="actcount" type="actcount"/>
+	<xs:element name="actCount" type="actCount"/>
 
 	<xs:complexType name="action">
 		<xs:annotation>
@@ -46,9 +49,9 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="act_count" type="act_count"/>
-			<xs:element ref="name"/>
-			<xs:element name="trigger" minOccurs="0" type="richText"/>
+			<xs:element name="actCount" type="actCount"/>
+			<xs:element name="actName" type="xs:token" minOccurs="0"/>
+			<xs:element name="trigger" type="xs:token" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="action" type="action"/>
@@ -127,7 +130,7 @@
 			<xs:enumeration value="day">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						Event which triggers every day
+						Event which triggers every day/24 hours
 					</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
@@ -208,21 +211,14 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="int">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						The number of times the thing happens can happen in the time window
-					</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element ref="int">
+			<xs:element name="occurs" type="int">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
 						The number of times the event happens in the time window
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element ref="event">
+			<xs:element name="interval" type="event">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
 						The type of event which the frequency is based on
@@ -243,5 +239,354 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="frequency" type="frequency"/>
+
+	<!--
+	============================================================================
+	REQUIREMENTS TYPES
+	============================================================================
+	-->
+
+	<!-- reqs, prereqs -->
+	<xs:complexType name="reqs">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The description entry for the requirements to use or gain access to something.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="req" type="richText" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The description entry for a requirement to use or gain access to something.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!--
+	============================================================================
+	ABILITY TYPES
+	============================================================================
+	-->
+
+	<xs:complexType name="abilities">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The standard abilities list for an entity.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="strength" type="abilityStrMod"/>
+			<xs:element name="dexterity" type="abilityDexMod"/>
+			<xs:element name="constitution" type="abilityConMod"/>
+			<xs:element name="intelligence" type="abilityIntMod"/>
+			<xs:element name="wisdom" type="abilityWisMod"/>
+			<xs:element name="charisma" type="abilityChaMod"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="ability">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The name of an ability.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="strength"/>
+			<xs:enumeration value="dexterity"/>
+			<xs:enumeration value="constitution"/>
+			<xs:enumeration value="intelligence"/>
+			<xs:enumeration value="wisdom"/>
+			<xs:enumeration value="charisma"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="abilityMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Modifier value given for an ability.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="intGroup"/>
+		</xs:sequence>
+		<xs:attribute name="ability" type="ability" use="optional"/>
+	</xs:complexType>
+
+	<xs:complexType name="namedAbilityMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Name and modifier for a given ability.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="ability">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The name of the ability
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:group ref="intGroup"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="abilityStrMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Modifier value given for the strength ability.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="abilityMod">
+				<xs:sequence>
+					<xs:group ref="intGroup"/>
+				</xs:sequence>
+				<xs:attribute name="ability" type="ability" use="optional" fixed="strength"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="abilityDexMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Modifier value given for the dexterity ability.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="abilityMod">
+				<xs:sequence>
+					<xs:group ref="intGroup"/>
+				</xs:sequence>
+				<xs:attribute name="ability" type="ability" use="optional" fixed="dexterity"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="abilityConMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Modifier value given for the constitution ability.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="abilityMod">
+				<xs:sequence>
+					<xs:group ref="intGroup"/>
+				</xs:sequence>
+				<xs:attribute name="ability" type="ability" use="optional" fixed="constitution"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="abilityIntMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Modifier value given for the intelligence ability.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="abilityMod">
+				<xs:sequence>
+					<xs:group ref="intGroup"/>
+				</xs:sequence>
+				<xs:attribute name="ability" type="ability" use="optional" fixed="intelligence"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="abilityWisMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Modifier value given for the wisdom ability.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="abilityMod">
+				<xs:sequence>
+					<xs:group ref="intGroup"/>
+				</xs:sequence>
+				<xs:attribute name="ability" type="ability" use="optional" fixed="wisdom"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="abilityChaMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Modifier value given for the charisma ability.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="abilityMod">
+				<xs:sequence>
+					<xs:group ref="intGroup"/>
+				</xs:sequence>
+				<xs:attribute name="ability" type="ability" use="optional" fixed="charisma"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+
+	<!--
+	============================================================================
+	SAVE TYPES
+	============================================================================
+	-->
+
+	<xs:complexType name="saves">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The standard saves list for an entity.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="fort" type="saveFortMod"/>
+			<xs:element name="ref" type="saveRefMod"/>
+			<xs:element name="will" type="saveWillMod"/>
+			<xs:group ref="numericAddendumGroup"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="save">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The name of a saving throw stat.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="fortitude"/>
+			<xs:enumeration value="reflex"/>
+			<xs:enumeration value="will"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="saveMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Modifier value given for a save.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="intGroup"/>
+		</xs:sequence>
+		<xs:attribute name="save" type="save" use="optional"/>
+	</xs:complexType>
+
+	<xs:complexType name="namedSaveMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Name and modifier for a given save.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="save">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The name of the save
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:group ref="intGroup"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="saveFortMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Modifier value given for a fortitude save.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="saveMod">
+				<xs:sequence>
+					<xs:group ref="intGroup"/>
+				</xs:sequence>
+				<xs:attribute name="save" type="save" use="optional" fixed="fortitude"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="saveRefMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Modifier value given for a reflex save.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="saveMod">
+				<xs:sequence>
+					<xs:group ref="intGroup"/>
+				</xs:sequence>
+				<xs:attribute name="save" type="save" use="optional" fixed="reflex"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="saveWillMod">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Modifier value given for a will save.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="saveMod">
+				<xs:sequence>
+					<xs:group ref="intGroup"/>
+				</xs:sequence>
+				<xs:attribute name="save" type="save" use="optional" fixed="will"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<!--
+	============================================================================
+	LANGUAGES TYPE
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Type to outline the languages that a P2E entity has
+	-->
+
+	<xs:complexType name="languages">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of languages for an entity.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:sequence minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="language" type="language"/>
+				<xs:element name="modifier" type="xs:token" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							Any modification to a previously-specified language
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:element name="extra" type="xs:token" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Extra details about the languages previously listed.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="language">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A given language, in its proper case.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token"/>
+	</xs:simpleType>
+
+
 
 </xs:schema>

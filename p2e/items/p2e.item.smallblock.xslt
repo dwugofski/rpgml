@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet
 	version="1.0"
-	xmlns:src="https://github.com/dwugofski/p2e" 
+	xmlns:src='https://github.com/dwugofski/rpgml/p2e'
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-	<xsl:import href="../common/xslt/smallblock/header.xslt"/>
-	<xsl:import href="../common/xslt/smallblock/action.xslt"/>
-	<xsl:import href="../common/xslt/smallblock/rich_text.xslt"/>
+	<xsl:import href="../../common/xslt/text_transform.xslt"/>
+	<xsl:import href="../common/xslt/smallblock/p2e.header.xslt"/>
+	<xsl:import href="../common/xslt/smallblock/p2e.rich_text.xslt"/>
+	<xsl:import href="../common/xslt/smallblock/p2e.requirements.xslt"/>
+	<xsl:import href="../common/xslt/smallblock/p2e.entries.xslt"/>
 
 	<!-- Documentation intended for XslDoc -->
 
 	<!-- 
 		========================================================================
-		Stat Block Header Bar
+		Item Stat Black in HTML, Small Block Format
 		========================================================================
 	-->
 
@@ -42,18 +44,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 			<!-- Trait list -->
-			<div class="statblock_tags">
-				<xsl:for-each select="src:traits/src:trait">
-					<xsl:choose>
-						<xsl:when test="@type != ''">
-							<div class="statblock_tag {@type}"><xsl:value-of select="."/></div>
-						</xsl:when>
-						<xsl:otherwise>
-							<div class="statblock_tag"><xsl:value-of select="."/></div>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:for-each>
-			</div>
+			<xsl:apply-templates select="./src:traits"/>
 			<!-- Item header information -->
 			<!-- The price (for a non-variant item) -->
 			<div class="statblock_section">
@@ -70,13 +61,23 @@
 					</xsl:if>
 					<xsl:apply-templates select="src:bulk"/>
 				</p>
+				<p class="reverse_indent">
+					<!-- How to use the item -->
+					<xsl:if test="src:activate">
+						<xsl:apply-templates select="src:activate"/>
+					</xsl:if>
+				</p>
 			</div>
 			<!-- Item description -->
-			<div class="statblock_section">
-				<xsl:apply-templates select="src:description"/>
-			</div>
+			<xsl:if test="src:description">
+				<hr/>
+				<div class="statblock_section">
+					<xsl:apply-templates select="src:description"/>
+				</div>
+			</xsl:if>
 			<!-- Item variant information -->
 			<xsl:for-each select="src:variants/src:variant">
+				<hr/>
 				<div class="statblock_section">
 					<p class="reverse_indent">
 						<strong><xsl:text>Type </xsl:text></strong>
@@ -95,17 +96,12 @@
 							<xsl:apply-templates select="src:price"/>
 						</xsl:if>
 					</p>
-					<xsl:apply-templates select="src:description"/>
+					<xsl:if test="src:description">
+						<xsl:apply-templates select="src:description"/>
+					</xsl:if>
 				</div>
 			</xsl:for-each>
 		</div>
-	</xsl:template>
-
-	<!--**
-		Description text
-	-->
-	<xsl:template match="src:description">
-		<xsl:apply-templates/>
 	</xsl:template>
 
 	<!--**
@@ -114,17 +110,30 @@
 	<xsl:template match="src:activate">
 		<p>
 			<strong><xsl:text>Activate </xsl:text></strong>
-			<xsl:call-template name="action_count">
-				<xsl:with-param name="num" select="./src:action/src:act_count"/>
+			<xsl:call-template name="actionCountImg">
+				<xsl:with-param name="count" select="./src:actCount"/>
 			</xsl:call-template>
-			<xsl:value-of select="./src:action/src:name"/><xsl:text>; </xsl:text>
-			<xsl:if test="./src:action/src:trigger">
-				<strong><xsl:text>Trigger </xsl:text></strong>
-				<xsl:value-of select="./src:action/src:trigger"/><xsl:text>; </xsl:text>
+			<xsl:if test="./src:actName">
+				<xsl:value-of select="./src:actName"/><xsl:text>; </xsl:text>
 			</xsl:if>
-			<strong><xsl:text>Effect </xsl:text></strong>
-			<!-- Add the first paragraph in-line -->
-			<xsl:apply-templates select="./src:effect/src:p[1]" mode="enclosed_rich_paragraph"/>
+			<xsl:if test="./src:trigger">
+				<strong><xsl:text>Trigger </xsl:text></strong>
+				<xsl:value-of select="./src:trigger"/><xsl:text>; </xsl:text>
+			</xsl:if>
+			<xsl:if test="./src:reqs">
+				<strong><xsl:text>Requirements </xsl:text></strong>
+				<xsl:for-each select="./src:reqs/src:req">
+					<xsl:if test="position() > 1">
+						<xsl:text>, </xsl:text>
+					</xsl:if>
+					<xsl:value-of select="."/>
+				</xsl:for-each>
+			</xsl:if>
+			<xsl:if test="./src:effect">
+				<strong><xsl:text>Effect </xsl:text></strong>
+				<!-- Add the first paragraph in-line -->
+				<xsl:apply-templates select="./src:effect/src:p[1]" mode="enclosed_rich_paragraph"/>
+			</xsl:if>
 		</p>
 		<!-- Should add the rest of the effect description as separate paragraphs -->
 		<xsl:for-each select="./src:effect/src:p">
@@ -141,7 +150,7 @@
 		<strong><xsl:text>Price </xsl:text></strong>
 		<xsl:value-of select="src:int"/>
 		<xsl:text> </xsl:text>
-		<xsl:value-of select="src:money"/>
+		<xsl:value-of select="src:coin"/>
 		<xsl:if test="src:special">
 			<xsl:text> </xsl:text>
 			<xsl:value-of select="src:special"/>
@@ -153,16 +162,8 @@
 	-->
 	<xsl:template match="src:usage">
 		<strong><xsl:text>Usage </xsl:text></strong>
-		<xsl:choose>
-			<xsl:when test="src:held">
-				<!-- For held items -->
-				<xsl:text>held in </xsl:text>
-				<xsl:choose>
-					<xsl:when test="src:held != 1"><xsl:value-of select="src:held"/><xsl:text> hands</xsl:text></xsl:when>
-					<xsl:otherwise><xsl:text>1 hand</xsl:text></xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
-		</xsl:choose>
+		<xsl:text>: </xsl:text>
+		<xsl:value-of select="."/>
 	</xsl:template>
 
 	<!--**

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:rpgml="https://github.com/dwugofski/rpgml"
+	xmlns='https://github.com/dwugofski/rpgml/p2e'
+	targetNamespace='https://github.com/dwugofski/rpgml/p2e'
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:include schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="../common/xsd/p2e.base.xsd"/>
+
+	<!--
+	============================================================================
+	ACTIVITY DESCRIPTION TEMPLATE
+	============================================================================
+	-->
+
+	<xs:complexType name="activity">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The description entry for an activity.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="name">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The display name of the activity.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="actCount" type="actCount">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						How many actions the activity requires.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element ref="traits" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The traits the activity has.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			
+			<xs:element name="prereqs" type="reqs" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Any minimum ability scores, feats, proficiency ranks, or
+						other prerequisites you must have before you can access
+						this rule element are listed here.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="frequency" type="plaintext" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						This is the limit on how many times you can use the
+						ability within a given time.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="trigger" type="plaintext" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Reactions and some free actions have triggers that must
+						be met before they can be used.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="cost" type="richText" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Some actions have costs associated with taking the
+						action.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			
+			<xs:element name="reqs" type="reqs" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Sometimes you must have a certain item or be in a
+						certain circumstance to use an ability. If so, it’s
+						listed in this section.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="description" type="description">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						This section describes the effects or benefits of a rule
+						element. If the rule is an action, it explains what the
+						effect is or what you must roll to determine the effect.
+						If it’s a feat that modifies an existing action or
+						grants a constant effect, the benefit is explained here.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="special" type="description" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Any special qualities of the rule are explained in this
+						section. Usually this section appears in feats you can
+						select more than once, explaining what happens when you
+						do.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+		<xs:attribute name="id" type="id_string" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					A unique identifier for the activity.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:element name="activity" type="activity"/>
+
+</xs:schema>

@@ -151,6 +151,13 @@
 	</xsl:template>
 
 	<!--**
+		Displays a horizontal rule
+	-->
+	<xsl:template match="*[local-name(.)='hr']">
+		<hr/>
+	</xsl:template>
+
+	<!--**
 		Displays a paragraph of text
 	-->
 	<xsl:template match="*[local-name(.)='p']">

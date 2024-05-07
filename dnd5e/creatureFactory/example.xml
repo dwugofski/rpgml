@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<base id="humanoid"
+	xmlns="https://github.com/dwugofski/rpgml/dnd5e/creatureFactory"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://github.com/dwugofski/rpgml/dnd5e ../../../dnd5e/creatures/dnd.creature.xsd"
+	>
+
+	<name>Humanoid</name>
+	<size>medium</size>
+	<creatureType>humanoid</creatureType>
+	<creatureSubtype>any</creatureSubtype>
+	<speed>
+		<int>30</int>
+	</speed>
+	<abilities>
+		<strength>
+			<int>10</int>
+		</strength>
+		<dexterity>
+			<int>10</int>
+		</dexterity>
+		<constitution>
+			<int>10</int>
+		</constitution>
+		<intelligence>
+			<int>10</int>
+		</intelligence>
+		<wisdom>
+			<int>10</int>
+		</wisdom>
+		<charisma>
+			<int>10</int>
+		</charisma>
+	</abilities>
+	<proficiencies>
+	</proficiencies>
+	<features>
+	</features>
+	<actions>
+		<weaponAttack>
+			<name>Weapon Attack</name>
+			<reach>5</reach>
+			<area type="target">1</area>
+			<description>
+				<p>The person attacks with the weapon in their hand.</p>
+			</description>
+		</weaponAttack>
+	</actions>
+</base>

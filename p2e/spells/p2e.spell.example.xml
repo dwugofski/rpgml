@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<spell
+	id="haste"
+	subtype="spell"
+	xmlns='https://github.com/dwugofski/rpgml/p2e'
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://github.com/dwugofski/p2e p2e.spell.xsd">
+
+	<name>Haste</name>
+	<level>3</level>
+	<traits>
+		<trait>transmutation</trait>
+	</traits>
+	<traditions>
+		<tradition>arcane</tradition>
+		<tradition>occult</tradition>
+		<tradition>primal</tradition>
+	</traditions>
+	<actCount>2</actCount>
+	<components>
+		<somatic></somatic>
+		<verbal/>
+		<material>A lock of hair</material>
+	</components>
+	<range>30 feet</range>
+	<targets>1 creature</targets>
+	<spellSave>
+		<basic/>
+		<save>fortitude</save>
+	</spellSave>
+	<duration>1 minute</duration>
+	<description>
+		<p>
+			Magic empowers the target to act faster. It gains the quickened
+			condition and can use the extra action each round only for Strike
+			and Stride actions.
+		</p>
+	</description>
+	<heightened level="7">
+		<p>
+			You can target up to 6 creatures.
+		</p>
+	</heightened>
+</spell>

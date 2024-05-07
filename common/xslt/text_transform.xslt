@@ -93,4 +93,44 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<!--**
+		Change the case of some text
+
+		Valid options for 'case':
+		- lower: all lowercase
+		- upper: all capitalized
+		- first: Capitalize the first letter of the string make others lowercase
+		- camel: Capitalize the first character of each space-separated word and make the others lowercase
+		- [else]: Do nothing
+	-->
+	<xsl:template name="Tsetcase">
+		<xsl:param name="text"/>
+		<xsl:param name="case"/>
+		<xsl:choose>
+			<xsl:when test="$case = 'lowercase' or $case = 'lower'">
+				<xsl:call-template name="Tall_lower">
+					<xsl:with-param name="text" select="$text"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="$case = 'uppercase' or $case = 'upper'">
+				<xsl:call-template name="Tall_caps">
+					<xsl:with-param name="text" select="$text"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="$case = 'first'">
+				<xsl:call-template name="Tcapitalize">
+					<xsl:with-param name="text" select="$text"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="$case = 'camel'">
+				<xsl:call-template name="Tcamelcase">
+					<xsl:with-param name="text" select="$text"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$text"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
 </xsl:stylesheet>

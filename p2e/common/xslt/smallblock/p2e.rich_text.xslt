@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet
 	version="1.0"
-	xmlns:src="https://github.com/dwugofski/p2e" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:src="https://github.com/dwugofski/rpgml/p2e" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 	<!-- Documentation intended for XslDoc -->
@@ -11,6 +12,13 @@
 		Rich Text Output
 		========================================================================
 	-->
+
+	<!--**
+		Displays a line break
+	-->
+	<xsl:template match='src:br'>
+		<br/>
+	</xsl:template>
 
 	<!--**
 		Displays strong (i.e. bold) text
@@ -58,6 +66,15 @@
 	</xsl:template>
 
 	<!--**
+		Displays roll text
+	-->
+	<xsl:template match='src:roll'>
+		<span class="entry roll">
+			<xsl:apply-templates/>
+		</span>
+	</xsl:template>
+
+	<!--**
 		Displays a list item
 	-->
 	<xsl:template match='src:li'>
@@ -85,12 +102,29 @@
 	</xsl:template>
 
 	<!--**
+		Displays a horizontal rule
+	-->
+	<xsl:template match='src:hr'>
+		<hr/>
+	</xsl:template>
+
+	<!--**
 		Displays a paragraph of text
 	-->
 	<xsl:template match='src:p'>
-		<p class='plaintext'>
+		<p>
+			<xsl:if test="@class">
+				<xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+			</xsl:if>
 			<xsl:apply-templates/>
 		</p>
+	</xsl:template>
+
+	<!--**
+		Displays a paragraph of text
+	-->
+	<xsl:template match='src:p' mode="enclosed_rich_paragraph">
+		<xsl:apply-templates/>
 	</xsl:template>
 
 	<!--**
@@ -114,6 +148,38 @@
 		<p>
 			<xsl:apply-templates/>
 		</p>
+	</xsl:template>
+
+	<!--**
+		Displays a check result
+	-->
+	<xsl:template match="src:checkResult">
+		<div class="checkResult">
+			<xsl:if test="./src:critSuccess">
+				<p>
+					<strong>Critical Success</strong><xsl:text>: </xsl:text>
+					<xsl:apply-templates select="./src:critSuccess"/>
+				</p>
+			</xsl:if>
+			<xsl:if test="./src:success">
+				<p>
+					<strong>Success</strong><xsl:text>: </xsl:text>
+					<xsl:apply-templates select="./src:success"/>
+				</p>
+			</xsl:if>
+			<xsl:if test="./src:fail">
+				<p>
+					<strong>Failure</strong><xsl:text>: </xsl:text>
+					<xsl:apply-templates select="./src:fail"/>
+				</p>
+			</xsl:if>
+			<xsl:if test="./src:critFail">
+				<p>
+					<strong>Critical Failure</strong><xsl:text>: </xsl:text>
+					<xsl:apply-templates select="./src:critFail"/>
+				</p>
+			</xsl:if>
+		</div>
 	</xsl:template>
 
 </xsl:stylesheet>

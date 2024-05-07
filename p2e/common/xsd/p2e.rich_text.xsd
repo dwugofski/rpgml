@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns='https://github.com/dwugofski/rpgml/p2e'
+	targetNamespace='https://github.com/dwugofski/rpgml/p2e'
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<!--
+		Wrapper for types associated with the header information of an entity
+	-->
+
+	<xs:include schemaLocation="../../../common/xsd/rpgml.base.xsd"/>
+
+	<!--
+	============================================================================
+	RICH TEXT ELEMENTS
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Extensions to the base rich text group
+	-->
+
+	<xs:group name="p2eRichTextElements">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				In-line elements which enhance text for the purposes of display.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:group ref="richTextElements"/>
+		</xs:choice>
+	</xs:group>
+
+	<xs:group name="p2eRichParagraphElements">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Line-sensitive (i.e. not in-line) elements which enhance text for the purposes of display.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:group ref="richParagraphElements"/>
+			<xs:element name="checkResult" type="checkResult"/>
+		</xs:choice>
+	</xs:group>
+
+	<xs:complexType name="p2eRichText" mixed="true">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Rich text for formal display.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="p2eRichTextElements"/>
+		</xs:choice>
+		<xs:attribute name="class"/>
+	</xs:complexType>
+
+	<xs:complexType name="p2eRichParagraph" mixed="true">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Rich text for formal display of a line-sensitive text.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="p2eRichTextElements"/>
+			<xs:element ref="br"/>
+		</xs:choice>
+		<xs:attribute name="class"/>
+	</xs:complexType>
+
+	<xs:complexType name="p2eRichParagraphContainer" mixed="true">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Parent container for lines of formal text display.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="p2eRichTextElements"/>
+			<xs:group ref="p2eRichParagraphElements"/>
+		</xs:choice>
+		<xs:attribute name="class"/>
+	</xs:complexType>
+
+	<!--
+	============================================================================
+	CHECK RESULT
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Types to outline a textual description of a success/fail/critical success
+	condition
+	-->
+
+	<xs:complexType name="checkResult">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Type to handle (critical) success/failure descriptions
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="critSuccess" type="p2eRichText" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The description of what happens on a critical success
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="success" type="p2eRichText" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The description of what happens on a success
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="fail" type="p2eRichText" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The description of what happens on a failure
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="critFail" type="p2eRichText" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The description of what happens on a critical failure
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!--
+	============================================================================
+	DESCRIPTION
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Types to outline the description of an entity
+	-->
+
+	<xs:group name="descriptionGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Group definition for rich text describing an entity
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="p"/>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:group ref="p2eRichParagraphElements"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:group>
+
+	<xs:complexType name="description">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Rich text describing an entity
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="descriptionGroup"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="description" type="description"/>
+
+	<xs:complexType name="namedDescription">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A rich text description of a named detail
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="name">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The name of the detail
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="description"/>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:rpgml="https://github.com/dwugofski/rpgml"
+	xmlns='https://github.com/dwugofski/rpgml/p2e'
+	targetNamespace='https://github.com/dwugofski/rpgml/p2e'
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:include schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="../common/xsd/p2e.base.xsd"/>
+
+	<!--
+	============================================================================
+	SPELL DESCRIPTION TEMPLATE
+	============================================================================
+	-->
+
+	<xs:complexType name="spell">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The description entry for a spell.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="name" type="name">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The display name of the spell.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The rank (remaster) or level (legacy) of the spell.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:element name="level" type="level"/>
+				<xs:element name="rank" type="level"/>
+			</xs:choice>
+
+			<xs:element name="traits" type="traits" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The traits the feat has.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="traditions" minOccurs="0" type="spellTradList">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The traditions of the spell.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="domains" minOccurs="0" type="domainList">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The domains the spell qualifies for.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="actCount" type="actCount">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						How many actions (if any) it takes to cast the spell.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="components" type="components">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						How many actions (if any) it takes to cast the spell.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="trigger" type="xs:token" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The trigger (if applicable) required to cast the spell.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			
+			<xs:element name="reqs" type="reqs" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Sometimes you must have a certain item or be in a
+						certain circumstance to use an ability. If so, it’s
+						listed in this section.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="range" type="xs:token" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The range the spell
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="area" type="xs:token" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The area of effect for the spell
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="targets" type="xs:token" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The targets for the spell
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="spellSave" type="spellSave" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The saving throws made for the spell
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="duration" type="xs:token" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The duration for the spell
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="description" type="description">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						This section describes the effects and benefits of a
+						spell. This includes detailing the different possible
+						results on a critical success, success, failure, and
+						critical failure on an attack/save.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="heightened" type="heightened" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						This section describes the effects and benefits of a
+						heightening a spell. Multiple entries can be made for
+						multiple levels of heightening.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+
+		<xs:attribute name="id" type="id_string" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					A unique identifier for the spell.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="subtype" type="spellSubtype" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					Whether this spell is a normal spell, a cantrip, or a focus
+					spell. If not provide, a normal spell is assumed.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+	<!--
+	============================================================================
+	SPELL DESCRIPTION COMPONENT TYPES
+	============================================================================
+	-->
+
+	<xs:simpleType name="spellSubtype">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Whether a spell is a normal spell, a cantrip, or a focus spell.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="spell"/>
+			<xs:enumeration value="cantrip"/>
+			<xs:enumeration value="focus"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="spellTradition">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A string denoting the tradition of a spell.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="arcane"/>
+			<xs:enumeration value="divine"/>
+			<xs:enumeration value="occult"/>
+			<xs:enumeration value="primal"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="spellTradList">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of spell traditions.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tradition" type="spellTradition" minOccurs="1" maxOccurs="4"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="domainList">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of (i.e. cleric) focus spell domains.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="domain" type="xs:token" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="components">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The components required to cast a spell, including the materials
+				required for the material component.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="somatic" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="verbal" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="material" minOccurs="0" maxOccurs="1" type="xs:token"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="spellSave">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A description for the saving throw made for a spell.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="basic" minOccurs="0"/>
+			<xs:element name="save" type="save"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="heightened">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A description for what spells do when heighted to what levels
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="p">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						What the spell does when heightened
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="level" type="level" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					A level or level increment at which the spell changes
+					its behavior
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+</xs:schema>

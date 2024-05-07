@@ -38,7 +38,7 @@
 				<xsl:text>five</xsl:text>
 			</xsl:when>
 			<xsl:when test="number($value) = 6">
-				<xsl:text>size</xsl:text>
+				<xsl:text>six</xsl:text>
 			</xsl:when>
 			<xsl:when test="number($value) = 7">
 				<xsl:text>seven</xsl:text>

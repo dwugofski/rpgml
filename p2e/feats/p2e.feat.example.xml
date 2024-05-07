@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feat
+	id="mutlilingual"
+	xmlns='https://github.com/dwugofski/rpgml/p2e'
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://github.com/dwugofski/p2e p2e.activity.xsd">
+
+	<name>Multilingual</name>
+	<level>1</level>
+	<actCount>passive</actCount>
+	<traits>
+		<trait>general</trait>
+		<trait>skill</trait>
+	</traits>
+	<prereqs>
+		<req>trained in Society</req>
+	</prereqs>
+	<description>
+		<p>
+			You easily pick up new languages. You learn two new languages,
+			chosen from common languages, uncommon languages, and any others
+			you have access to. You learn an additional language if you are or
+			become a master in Society and again if you are or become legendary.
+		</p>
+	</description>
+	<special>
+		<p>
+			You can select this feat multiple times. Each time, you learn
+			additional languages.
+		</p>
+	</special>
+</feat>

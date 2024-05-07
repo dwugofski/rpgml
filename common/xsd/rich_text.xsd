@@ -87,7 +87,7 @@
 		<xs:complexType/>
 	</xs:element>
 
-	<xs:element name="p" type="richText">
+	<xs:element name="p" type="richParagraph">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
 				A paragraph of text.
@@ -135,7 +135,7 @@
 		</xs:annotation>
 	</xs:element>
 
-	<xs:element name="li" type="richParagraph">
+	<xs:element name="li" type="richParagraphContainer">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
 				A list item.
@@ -169,6 +169,14 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="hr">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A horizontal rule line
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
 	<xs:group name="richParagraphElements">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
@@ -186,6 +194,7 @@
 			<xs:element ref="li"/>
 			<xs:element ref="ul"/>
 			<xs:element ref="ol"/>
+			<xs:element ref="hr"/>
 		</xs:choice>
 	</xs:group>
 
@@ -198,6 +207,7 @@
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="richTextElements"/>
 		</xs:choice>
+		<xs:attribute name="class"/>
 	</xs:complexType>
 
 	<xs:complexType name="richParagraph" mixed="true">
@@ -210,9 +220,10 @@
 			<xs:group ref="richTextElements"/>
 			<xs:element ref="br"/>
 		</xs:choice>
+		<xs:attribute name="class"/>
 	</xs:complexType>
 
-	<xs:complexType name="richParagraphContainer">
+	<xs:complexType name="richParagraphContainer" mixed="true">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
 				Parent container for lines of formal text display.
@@ -222,50 +233,7 @@
 			<xs:group ref="richTextElements"/>
 			<xs:group ref="richParagraphElements"/>
 		</xs:choice>
-	</xs:complexType>
-
-	<xs:group name="descriptionGroup">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				Group definition for rice text describing an entity
-			</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element ref="p"/>
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:group ref="richParagraphElements"/>
-			</xs:choice>
-		</xs:sequence>
-	</xs:group>
-
-	<xs:complexType name="description">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				Rich text describing an entity
-			</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:group ref="descriptionGroup"/>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:element name="description" type="description"/>
-
-	<xs:complexType name="namedDescription">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				A rich text description of a named detail
-			</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element ref="name">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						The name of the detail
-					</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element ref="description"/>
-		</xs:sequence>
+		<xs:attribute name="class"/>
 	</xs:complexType>
 
 	<xs:complexType name="modifier">

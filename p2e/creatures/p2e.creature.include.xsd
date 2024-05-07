@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns="https://github.com/dwugofski/rpgml/p2e" 
+	targetNamespace='https://github.com/dwugofski/rpgml/p2e'
+	elementFormDefault="qualified">
+
+	<xs:include schemaLocation="../feats/p2e.feat.include.xsd"/>
+	<xs:include schemaLocation="../spells/p2e.spell.include.xsd"/>
+
+	<!--
+	============================================================================
+	CREATURE DESCRIPTION TEMPLATE
+	============================================================================
+	-->
+
+	<xs:complexType name="creature">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The description entry for a creature.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="name">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The display name of the creature.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="level" type="level"/>
+
+			<xs:element name="rarity" type="rarity" minOccurs="0"/>
+
+			<xs:element name="alignment" type="alignment" minOccurs="0"/>
+
+			<xs:element name="size" type="size"/>
+
+			<xs:element name="types" type="creatureTypes">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The various creature type traits the creature has.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="traits" type="traits">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The various miscellaneous traits the creature has.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="perception" type="intNumeric">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The bonus to perception the creature receives.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="languages" type="languages">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The languages the creature knows.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="skills">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The skills the creature has proficiency with.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="skill" type="namedIntNumeric"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="abilities" type="abilities">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The ability modifiers of the creature.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="items">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The items the creature has.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="itemName" type="xs:token"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="interactions" type="feats">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Special abilities that affect how a creature perceives and interacts with the world.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="armor" type="intNumeric">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The creature's AC.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="saves" type="saves">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The creature's saves.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="hitpoints" type="intNumeric">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The creature's hitpoints.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="hardness" type="intNumeric" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The creature's hardness.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:group ref="dmgModifiersGroup">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The creature's immunities, weaknesses, and resistances.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:group>
+
+			<xs:element name="offturn" type="feats">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Special abilities that either automatically affect its
+						defense, or which are usually triggered when it’s not
+						the creature’s turn.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="speeds" type="speeds">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The speeds available to the creature.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="attacks" type="attacks">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The attacks available to the creature.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="spells" type="spellLists">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						A list of spell lists the creature has access to.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="onturn" type="feats">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Actions a creature can take on its own turn, or
+						abilities which are expected to happen on its turn.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="id_string" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+					A unique identifier for the feat.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+	<!--
+	============================================================================
+	PERCEPTION TYPE
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Type to outline a perception spec
+	-->
+
+	<xs:complexType name="perception">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Group specifying the perceptions available to a creature.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="intGroup"/>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="special" type="xs:token">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							A specific special perception ability for the
+							creature
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!--
+	============================================================================
+	IMMUNITY/WEAKNESS/RESISTANCE TYPE
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Type to outline immunities/weaknesses/resistances of a creature.
+	-->
+
+	<xs:group name="dmgModifiersGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Group specifying the lists of immunities, weaknesses, and
+				resistances of a creature.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="immunities" type="immunities"/>
+			<xs:element name="weaknesses" type="weaknesses"/>
+			<xs:element name="resistances" type="resistances"/>
+		</xs:sequence>
+	</xs:group>
+
+	<xs:complexType name="immunities">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Type to specify the immunities a creature has
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="immunity" type="lower"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="weaknesses">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Type to specify the weaknesses a creature has
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="weakness" type="namedIntNumeric"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="resistances">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Type to specify the resistances a creature has
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="resistance" type="namedIntNumeric"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<!--
+	============================================================================
+	SPEEDS TYPE
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Types to outline the speeds available to a creature
+	-->
+
+	<xs:complexType name="speeds">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The speeds a creature can have access to, specified in feet.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="intGroup" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The land speed of the creature. Omit if a land speed is
+						not available.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:group>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="speed" type="namedIntNumeric">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							A special, non-land speed the creature has
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!--
+	============================================================================
+	ATTACK TYPE
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Types to outline the attacks available to a creature
+	-->
+
+	<xs:complexType name="attacks">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				An list of attacks
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="attack" type="attack"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="attack">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				An attack action the creature can take.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="type" type="attackType"/>
+			<xs:element name="actCount" type="actCount"/>
+			<xs:element name="name" type="lower"/>
+			<xs:group ref="intGroup">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The attack modifier used for the attack.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:group>
+			<xs:element name="traits" type="traits" minOccurs="0"/>
+			<xs:element name="result" type="attackResult"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="attackType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The type of action which can be made.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="melee"/>
+			<xs:enumeration value="ranged"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="attackResult">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				Specification of what happens as a result of a successful
+				attack.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="1" maxOccurs="unbounded">
+			<xs:element name="damage" type="namedRolledNumeric">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						Specification of the damage an attack can inflict.
+						The name of the numeric is the type of damage.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="effect" type="xs:token">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						A special effect which triggers in response to the
+						attack.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+
+	<!--
+	============================================================================
+	SPELL LIST SUMMARY TYPE
+	============================================================================
+
+	INCLUDE-ONLY
+
+	Types to outline the spell list summaries of a creature
+	-->
+
+	<xs:complexType name="spellLists">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of spell lists
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="spellList" type="spellList"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="spellList">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A spell list (e.g. of prepared spells or a spell repetoire) a
+				creature has access to.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tradition" type="spellTradition"/>
+			<xs:element name="type" type="spellListType"/>
+			<xs:element name="difficulty" type="intNumeric"/>
+			<xs:element name="attack" type="intNumeric" minOccurs="0"/>
+			<xs:element name="rank" maxOccurs="unbounded" type="spellRankList"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="spellListType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				The types of spell lists creatures can have.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="lower">
+			<xs:enumeration value="prepared"/>
+			<xs:enumeration value="spontaneous"/>
+			<xs:enumeration value="innate"/>
+			<xs:enumeration value="ritual"/>
+			<xs:enumeration value="focus"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="spellRankList">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of spells available at a given rank.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="intGroup">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The rank being used. 0 for cantrips, and any negative
+						value for continuous effects.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:group>
+			<xs:element name="height" minOccurs="0" type="int"/>
+			<xs:element name="slots" type="intNumeric" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">
+						The number of slots available at the given level (for
+						spontaneous casters).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="spell" type="spellListItem" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="spellListItem">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A spell in the spell list.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="lower">
+				<xs:attribute name="count" type="xs:nonNegativeInteger" default="1">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							The number of times the spell has been prepared.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="https://github.com/dwugofski/rpgml/dnd5e"
+	targetNamespace="https://github.com/dwugofski/rpgml/dnd5e"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:include schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="../common/xsd/dnd5e.base.xsd"/>
+
+	<!-- Template for Dungeons and Dragons 5e character -->
+
+	<!--
+	============================================================================
+	Character Description Template
+	============================================================================
+	-->
+
+	<element name="character">
+		<xs:complexType>
+			<!--
+			Elements ===========================================================
+			-->
+			<xs:sequence>
+				<xs:element ref="name"/>
+				<xs:element ref="size"/>
+				<xs:element ref="creatureType"/>
+				<!-- If multiple creature types are supported, we may need to change this format -->
+				<xs:element ref="creatureSubtype" minOccurs="0"/>
+				<xs:element ref="alignment"/>
+				<xs:element name="armors">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="armor" type="namedInt" minOccurs="1" maxOccurs="unbounded"/>
+						<xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<!--
+			Attributes =========================================================
+			-->
+		</xs:complexType>
+	</element>
+
+	<!--
+	============================================================================
+	Character Int Type
+	============================================================================
+	-->
+
+	<xs:complexType name="namedInt">
+		<xs:sequence>
+			<xs:element ref="name"/>
+			<xs:element ref="int"/>
+			<xs:element ref="description" minOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

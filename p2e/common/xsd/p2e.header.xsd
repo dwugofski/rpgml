@@ -10,7 +10,8 @@
 		Wrapper for types associated with the header information of an entity
 	-->
 
-	<xs:include schemaLocation="../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="../../../common/xsd/rpgml.base.xsd"/>
+	<xs:include schemaLocation="./p2e.rich_text.xsd"/>
 
 	<!--
 	============================================================================
@@ -22,7 +23,7 @@
 	Type to outline the level that a P2E entity has
 	-->
 	
-	<xs:element name="level">
+	<xs:simpleType name="level">
 		<xs:union>
 			<xs:simpleType>
 				<xs:restriction base="lower">
@@ -45,7 +46,8 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:union>
-	</xs:element>
+	</xs:simpleType>
+	<xs:element name="level" type="level"/>
 
 	<!--
 	============================================================================
@@ -54,7 +56,7 @@
 
 	INCLUDE-ONLY
 
-	Type to outline a trait that a P2E entity has
+	Types to outline the traits that a P2E entity has
 	-->
 
 	<xs:complexType name="traits">
@@ -69,6 +71,17 @@
 	</xs:complexType>
 	<xs:element name="traits" type="traits"/>
 
+	<xs:complexType name="creatureTypes">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A list of creature type traits for a PF2E entity.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="type" type="creatureTypeTrait"/>
+		</xs:choice>
+	</xs:complexType>
+
 	<xs:complexType name="trait">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
@@ -76,8 +89,8 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="lower">
-				<xs:attribute name="type" type="lower">
+			<xs:extension base="xs:token">
+				<xs:attribute name="type" type="unspaced">
 					<xs:annotation>
 						<xs:documentation xml:lang="en">
 							The type of trait this is. If unspecified, the type will be auto-selected.
@@ -88,5 +101,76 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:element name="trait" type="trait"/>
+
+	<xs:complexType name="creatureTypeTrait">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A creature type trait.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:restriction base="trait">
+				<xs:attribute name="type" type="unspaced" fixed="creatureType"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="rarity">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				An entity rarity trait.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:restriction base="trait">
+				<xs:enumeration value="common"/>
+				<xs:enumeration value="uncommon"/>
+				<xs:enumeration value="rare"/>
+				<xs:enumeration value="unique"/>
+				<xs:attribute name="type" type="unspaced" fixed="rarity"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="alignment">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				An alignment trait.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:restriction base="trait">
+				<xs:enumeration value="lg"/>
+				<xs:enumeration value="ng"/>
+				<xs:enumeration value="cg"/>
+				<xs:enumeration value="ln"/>
+				<xs:enumeration value="n"/>
+				<xs:enumeration value="cn"/>
+				<xs:enumeration value="le"/>
+				<xs:enumeration value="ne"/>
+				<xs:enumeration value="ce"/>
+				<xs:attribute name="type" type="unspaced" fixed="alignment"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="size">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				A creature size trait.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:restriction base="trait">
+				<xs:enumeration value="tiny"/>
+				<xs:enumeration value="small"/>
+				<xs:enumeration value="medium"/>
+				<xs:enumeration value="large"/>
+				<xs:enumeration value="huge"/>
+				<xs:enumeration value="gargantuan"/>
+				<xs:attribute name="type" type="unspaced" fixed="size"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
 
 </xs:schema>

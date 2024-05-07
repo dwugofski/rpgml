@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns="https://github.com/dwugofski/rpgml/p2e" 
+	targetNamespace='https://github.com/dwugofski/rpgml/p2e'
+	elementFormDefault="qualified">
+
+	<xs:include schemaLocation="./p2e.creature.include.xsd"/>
+
+	<!--
+	============================================================================
+	CREATURE DESCRIPTION ELEMENT
+	============================================================================
+	-->
+
+	<xs:element name="creature" type="creature"/>
+
+</xs:schema>

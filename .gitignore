@@ -1,3 +1,4 @@
 
 # Ignore the directory containing the test scripts
 test/*
+*.old

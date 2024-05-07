@@ -48,6 +48,17 @@
 		</xs:restriction>
 	</xs:simpleType>
 
+	<xs:simpleType name="unspaced">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				String with no spaces, but allowing various cases
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:pattern value="([a-zA-Z0-9_]+)"/>
+		</xs:restriction>
+	</xs:simpleType>
+
 	<xs:simpleType name="name">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
